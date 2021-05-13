@@ -149,12 +149,13 @@
 
 ; TODO replace with custom script to display different char based on curcumstances
 [module/track-playpause]
-	type = custom/text
+	type = custom/script
+	interval = 0.1
 
-	content-background = ${colors.green}
-	content-padding = 2.5
+	label-background = ${colors.green}
+	label-padding = 2.5
 
-	content = ""
+	exec = /home/oldwomanjosiah/.config/polybar/playing.sh
 	click-left = playerctl --player=spotify play-pause
 
 [module/track-prev]
