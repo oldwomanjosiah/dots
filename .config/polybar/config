@@ -57,9 +57,9 @@
 
 	wm-restack = i3
 
-	modules-left   = time date spacer track-prev track-playpause track-next spotify spacer i3-mode
+	modules-left   = time date spacer track-prev track-playpause track-next spotify
 	modules-center = i3
-	modules-right  = notification spacer volume power
+	modules-right  = i3-mode spacer notification spacer volume power
 
 ; ======== MODULES ========
 
@@ -79,12 +79,14 @@
 ; unfocused = Inactive workspace on any monitor
 ; visible = Active workspace on unfocused monitor
 ; urgent = Workspace with urgency hint set
+; the labels could also have the key %index% to indicate which number desktop
+;	they are.
 [module/i3-mode]
 	type = internal/i3
 
 	format = <label-mode>
 
-	label-mode-padding = 2
+	label-mode-padding = 3
 	label-mode-foreground = ${colors.background}
 	label-mode-background = ${colors.yellow}
 	label-mode = %mode%
@@ -98,33 +100,33 @@
 
 	ws-icon-0 = 1;
 	ws-icon-1 = 2;
-	ws-icon-2 = 3;
-	ws-icon-3 = 4;
-	ws-icon-4 = 5;
-	ws-icon-5 = 6;
-	ws-icon-6 = 7;
-	ws-icon-7 = 8;
+	ws-icon-2 = 3;3
+	ws-icon-3 = 4;4
+	ws-icon-4 = 5;5
+	ws-icon-5 = 6;6
+	ws-icon-6 = 7;7
+	ws-icon-7 = 8;
 	ws-icon-8 = 9;
 	ws-icon-9 = 10;
 
-	label-focused = %icon% %index%
+	label-focused = %icon%
 	label-focused-background = ${colors.primary}
 	label-focused-foreground = ${colors.primary-bg}
 	label-focused-overline = ${colors.primary}
-	label-focused-padding = 2.5
+	label-focused-padding = 3
 
-	label-unfocused = %icon% %index%
+	label-unfocused = %icon%
 	label-unfocused-background = ${colors.background}
-	label-unfocused-padding = 2.5
+	label-unfocused-padding = 3
 
-	label-visible = %icon% %index%
+	label-visible = %icon%
 	label-visible-background = ${colors.background}
 ;	label-visible-underline = ${self.label-focused-underline}
-	label-visible-padding = 2.5
+	label-visible-padding = 3
 
-	label-urgent = %icon% %index%
+	label-urgent = %icon%
 	label-urgent-background = ${colors.yellow}
-	label-urgent-padding = 2.5
+	label-urgent-padding = 3
 
 
 [module/spotify]
