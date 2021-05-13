@@ -201,7 +201,8 @@ exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 bindsym Control+Mod1+l exec gnome-screensaver-command -l
 
 # background image
-exec --no-startup-id feh --bg-scale /home/oldwomanjosiah/backgrounds/Mountain.png
+# exec --no-startup-id feh --bg-scale /home/oldwomanjosiah/backgrounds/Mountain.png
+exec --no-startup-id nitrogen --restore
 
 exec --no-startup-id i3-notifier
 exec --no-startup-id compton -cC -i 0.95 --backend glx --vsync
