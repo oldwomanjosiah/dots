@@ -90,3 +90,5 @@ set -U GEM_PATH '~/.gem'
 
 [ -t 1 ]; and startup
 export GPG_TTY=(tty)
+
+starship init fish | source
