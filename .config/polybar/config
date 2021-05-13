@@ -16,10 +16,25 @@
 	cyan		= #ff689d6a
 	white		= #ffa89984
 
-	primary		= ${self.blue}
-	primary-bg	= ${self.foreground}
+    black-bri	= #ff928374
+    red-bri		= #fffb4934
+    green-bri	= #ffb8bb26
+    yellow-bri	= #fffabd2f
+    blue-bri	= #ff83a598
+    magenta-bri = #ffd3869b
+    cyan-bri	= #ff8ec07c
+    white-bri	= #ffebdbb2
+
+	primary		= ${self.cyan-bri}
+	primary-bg	= ${self.background}
+
 	secondary	= ${self.blue}
-	alert		= ${self.yellow}
+
+	alert		= ${self.yellow-bri}
+	alert-bg	= ${self.background}
+
+	spotify		= ${self.cyan-bri}
+	spotify-bg	= ${self.background}
 
 
 [bar/base]
@@ -88,7 +103,7 @@
 
 	label-mode-padding = 3
 	label-mode-foreground = ${colors.background}
-	label-mode-background = ${colors.yellow}
+	label-mode-background = ${colors.alert}
 	label-mode = %mode%
 
 [module/i3]
@@ -125,7 +140,8 @@
 	label-visible-padding = 3
 
 	label-urgent = %icon%
-	label-urgent-background = ${colors.yellow}
+	label-urgent-background = ${colors.alert}
+	label-urgent-foreground = ${colors.alert-bg}
 	label-urgent-padding = 3
 
 
@@ -145,7 +161,7 @@
 	label-padding = 5
 
 	exec = python3 /home/oldwomanjosiah/github/scripts/polybar-spotify/spotify_status.py -f '{artist}: {song}' -t 30
-	format-underline = ${colors.green}
+	format-underline = ${colors.spotify}
 
 	click-left = i3 workspace 10
 
@@ -154,7 +170,8 @@
 	type = custom/script
 	interval = 0.1
 
-	label-background = ${colors.green}
+	label-background = ${colors.spotify}
+	label-foreground = ${colors.spotify-bg}
 	label-padding = 2.5
 
 	exec = /home/oldwomanjosiah/.config/polybar/playing.sh
@@ -163,7 +180,8 @@
 [module/track-prev]
 	type = custom/text
 
-	content-background = ${colors.green}
+	content-background = ${colors.spotify}
+	content-foreground = ${colors.spotify-bg}
 	content-padding = 2.5
 
 	content = ""
@@ -172,7 +190,8 @@
 [module/track-next]
 	type = custom/text
 
-	content-background = ${colors.green}
+	content-background = ${colors.spotify}
+	content-foreground = ${colors.spotify-bg}
 	content-padding = 2.5
 
 	content = ""
