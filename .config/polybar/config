@@ -59,7 +59,7 @@
 
 	modules-left   = time date spacer track-prev track-playpause track-next spotify spacer i3-mode
 	modules-center = i3
-	modules-right  = notification spacer spacer volume power
+	modules-right  = notification spacer volume power
 
 ; ======== MODULES ========
 
