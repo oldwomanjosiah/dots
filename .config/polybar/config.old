@@ -1,0 +1,330 @@
+; This is a modified version of the default configuration for
+; polybar given at github.com/polybar/polybar
+;
+; Josiah Hilden -- 2021-5-13
+
+[colors]
+;background = ${xrdb:color0:#222}
+background = #BA222222
+background-alt = #BA444444
+;foreground = ${xrdb:color7:#222}
+foreground = #dfdfdf
+foreground-alt = #8f8f8f
+primary = #ffb52a
+secondary = #e60053
+alert = #bd2c40
+
+[bar/main]
+;monitor = ${env:MONITOR:HDMI-1}
+width = 100%
+height = 36
+; offset-x = 200
+; offset-y = 10%
+radius = 10.0
+fixed-center = true
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+enable-ipc = true
+
+line-size = 4
+line-color = #f00
+
+border-size = 8
+border-right-size = 2.5%
+border-left-size = 2.5%
+border-color = #00000000
+
+padding-left = 0
+padding-right = 3
+
+module-margin-left = 0
+module-margin-right = 4
+
+font-0 = fixfont:pixelsize=12;1
+font-1 = unifont:fontformat=truetype:size=12:antialias=true;0
+font-2 = siji:pixelsize=12;1
+font-3 = Font Awesome 5 Free:pixelsize=12;1
+font-4 = Font Awesome 5 Free Solid:pixelsize=12;1
+font-5 = Font Awesome 5 Brands:pixelsize=12;1
+font-6 = CodeNewRoman Nerd Font Mono:pixelsize=12;1
+
+; {{{ Modules Configuration
+
+modules-left = i3
+modules-center = spotify notification
+;modules-right = filesystem xbacklight alsa pulseaudio xkeyboard memory cpu wlan eth battery temperature date powermenu
+modules-right = memory cpu eth alsa date day time powermenu lock
+
+tray-position = none
+tray-padding = 4
+;tray-background = #0063ff
+
+;wm-restack = bspwm
+wm-restack = i3
+
+;override-redirect = true
+
+;scroll-up = bspwm-desknext
+;scroll-down = bspwm-deskprev
+
+;scroll-up = i3wm-wsnext
+;scroll-down = i3wm-wsprev
+
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+; }}} Modules Configuration
+
+; MODULE -- Show a the current windows title
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:30:...%
+
+; {{{ i3
+
+; MODULE -- Show workspace information for i3
+[module/i3]
+type = internal/i3
+format = <label-state> <label-mode>
+index-sort = true
+wrapping-scroll = false
+
+ws-icon-0 = 1;
+ws-icon-1 = 2;
+ws-icon-2 = 3;
+ws-icon-3 = 4;
+ws-icon-4 = 5;
+ws-icon-5 = 6;
+ws-icon-6 = 7;
+ws-icon-7 = 8;
+ws-icon-8 = 9;
+ws-icon-9 = 10;
+
+; Only show workspaces on the same output as the bar
+;pin-workspaces = true
+
+label-mode-padding = 2
+label-mode-foreground = #{colors.foreground}
+label-mode-background = ${colors.background}
+
+; focused = Active workspace on focused monitor
+label-focused = %icon% %index%
+label-focused-background = ${colors.background-alt}
+label-focused-underline= ${colors.primary}
+label-focused-padding = 2
+
+; unfocused = Inactive workspace on any monitor
+label-unfocused = %icon% %index%
+label-unfocused-padding = 2
+
+; visible = Active workspace on unfocused monitor
+label-visible = %icon% %index%
+label-visible-background = ${self.label-focused-background}
+label-visible-underline = ${self.label-focused-underline}
+label-visible-padding = ${self.label-focused-padding}
+
+; urgent = Workspace with urgency hint set
+label-urgent = %icon% %index%
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 2
+
+; Separator in between workspaces
+; label-separator = |
+
+; }}} i3
+
+; MODULE -- Show information on the current playing song on spotify
+[module/spotify]
+type = custom/script
+interval = 1
+format = <label>
+format-prefix = " "
+exec = python3 /home/oldwomanjosiah/github/scripts/polybar-spotify/spotify_status.py -f '{artist}: {song}' -t 60
+format-underline = #1db954
+
+click-left = i3 workspace 10
+
+; {{{ General Status Information
+
+; MODULE -- Show current cpu utilization
+[module/cpu]
+type = internal/cpu
+interval = 2
+format-prefix = " "
+label = %percentage:2%%
+format-prefix-foreground = ${colors.foreground-alt}
+label-foreground = ${colors.foreground-alt}
+
+; MODULE -- Show current memory utilization
+[module/memory]
+type = internal/memory
+interval = 2
+format-prefix = " "
+format-prefix-foreground = ${colors.foreground-alt}
+# format-underline = #4bffdc
+label = %percentage_used%%
+label-foreground = ${colors.foreground-alt}
+
+; MODULE -- Show current networking stats for the ethernet port
+[module/eth]
+type = internal/network
+interface = enp40s0
+interval = 3.0
+
+# format-connected-underline = #55aa55
+# format-connected-prefix = " "
+# format-connected-prefix-foreground = ${colors.foreground-alt}
+label-connected =   %upspeed%  %downspeed%
+
+label-connected-foreground = ${colors.foreground-alt}
+# %local_ip%
+
+format-disconnected = <label-disconnected>
+format-disconnected-underline = ${colors.alert}
+label-disconnected = %ifname% disconnected
+label-disconnected-foreground = ${colors.foreground}
+
+; MODULE -- Show the current date and time
+[module/date]
+type = internal/date
+interval = 5
+
+date = "%b %d"
+date-alt = "%Y-%m-%d"
+
+label = %date%
+
+format =  <label>
+format-foreground = ${colors.foreground-alt}
+
+[module/day]
+type = internal/date
+interval = 30
+
+date = %A
+
+format = <label>
+format-foreground = ${colors.foreground-alt}
+
+[module/time]
+type = internal/date
+
+time = %H:%M
+
+label = %time%
+
+format-prefix = " "
+format = <label>
+format-foreground = ${colors.foreground}
+
+[module/alsa]
+type = internal/alsa
+
+format-volume = <label-volume> <bar-volume>
+label-volume = 
+label-volume-foreground = ${root.foreground}
+
+format-muted-foreground = ${colors.foreground}
+label-muted = " "
+
+bar-volume-width = 10
+bar-volume-foreground-0 = #55aa55
+bar-volume-foreground-1 = #55aa55
+bar-volume-foreground-2 = #55aa55
+bar-volume-foreground-3 = #55aa55
+bar-volume-foreground-4 = #55aa55
+bar-volume-foreground-5 = #f5a70a
+bar-volume-foreground-6 = #ff5555
+bar-volume-gradient = false
+bar-volume-indicator = |
+bar-volume-indicator-font = 2
+bar-volume-fill = ─
+bar-volume-fill-font = 2
+bar-volume-empty = ─
+bar-volume-empty-font = 2
+bar-volume-empty-foreground = ${colors.foreground-alt}
+
+; }}} General Status Information
+
+; {{{ Custom controls
+
+; MODULE -- Power Controls
+[module/powermenu]
+type = custom/menu
+
+expand-right = false
+
+format-spacing = 1
+;label-font = 1
+
+label-open = 
+;label-open-foreground = ${colors.secondary}
+
+label-close = 
+;label-close-foreground = ${colors.secondary}
+label-separator = " "
+;label-separator-foreground = ${colors.foreground-alt}
+
+menu-0-0 = 
+menu-0-0-exec = menu-open-3
+menu-0-1 = 
+menu-0-1-exec = menu-open-1
+menu-0-2 = 
+menu-0-2-exec = menu-open-2
+
+menu-1-0 = 
+menu-1-0-exec = menu-open-0
+menu-1-1 = 
+menu-1-1-exec = shutdown --reboot now
+
+menu-2-0 = 
+menu-2-0-exec = shutdown now
+menu-2-1 = 
+menu-2-1-exec = menu-open-0
+
+menu-3-0 = 
+menu-3-0-exec = i3 exit
+menu-3-1 = 
+menu-3-1-exec = menu-open-0
+
+; MODULE -- Lock the screen
+[module/lock]
+type = custom/text
+
+content = 
+click-left = i3lock -i /home/oldwomanjosiah/backgrounds/Mountain.png
+
+; }}} Custom Controls
+
+; {{{ Custom Information
+
+; MODULE -- i3notifier information
+[module/notification]
+type = "custom/script"
+
+label =  %output%
+
+exec = "(dbus-send --session --print-reply=literal --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.Notifications.ShowNotificationCount 2>/dev/null || ($HOME/.local/bin/i3-notifier && echo '? ? ?'))|tr -s ' '|cut -d' ' -f 3"
+click-left = "dbus-send --session --print-reply --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.Notifications.ShowNotifications"
+
+; }}} Custom Informaiton
+
+; {{{ Settings
+
+[settings]
+screenchange-reload = true
+;compositing-background = xor
+;compositing-background = screen
+;compositing-foreground = source
+;compositing-border = over
+;pseudo-transparency = false
+
+[global/wm]
+margin-top = 10
+margin-bottom = 10
+
+; }}} Settings
+
+; vim:ft=dosini
