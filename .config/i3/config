@@ -205,7 +205,7 @@ bindsym Control+Mod1+l exec gnome-screensaver-command -l
 exec --no-startup-id nitrogen --restore
 
 exec --no-startup-id i3-notifier
-exec --no-startup-id compton -cC -i 0.95 --backend glx --vsync
+exec --no-startup-id compton -cC -i 0.95 --backend glx --vsync --focus-exclude 'class_g = "Rofi"'
 
 exec xmodmap -e "keysym Caps_Lock = Escape"
 exec sleep 5 && xmodmap -e "clear lock" &
