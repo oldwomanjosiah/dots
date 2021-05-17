@@ -7,10 +7,10 @@ pass it through dmenu mode or as a script starting with `rofi-` to get custom me
 configuration {
 	modi: [drun, window, ssh];
 	show-icons: true;
-	font: "CodeNewRoman Nerd Font Mono 13";
+	// font: "CodeNewRoman Nerd Font Mono 13";
 	terminal: "alacritty";
-	lines: 25;
-	theme: "gruvbox-dark";
+	// lines: 25;
+	theme: "lower";
 	sidebar-mode: true;
 	matching: "fuzzy"; // Seems to fuck up searching for apps for some reason
 	sorting: "fzf"; // This seems to fix fuzzy matching

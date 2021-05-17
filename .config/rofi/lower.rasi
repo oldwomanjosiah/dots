@@ -1,0 +1,155 @@
+/**
+ * Josiah Hilden
+ * vim:ft=css
+ */
+
+
+* {
+	background:		#32302fff;
+	foreground:		#ebdbb2ff;
+
+	background-t:	#32302fb0;
+
+	black:			#282828ff;
+	red:			#cc241dff;
+	green:			#98971aff;
+	yellow:			#d79921ff;
+	blue:			#458588ff;
+	magenta:		#b16286ff;
+	cyan:			#689d6aff;
+	white:			#a89984ff;
+
+    black-bri:		#928374ff;
+    red-bri:		#fb4934ff;
+    green-bri:		#b8bb26ff;
+    yellow-bri:		#fabd2fff;
+    blue-bri:		#83a598ff;
+    magenta-bri:	#d3869bff;
+    cyan-bri:		#8ec07cff;
+    white-bri:		#ebdbb2ff;
+
+	primary:		@cyan-bri;
+	primary-bg:		@background;
+
+	secondary:		@blue;
+
+	alert:			@yellow-bri;
+	alert-bg:		@background;
+
+	trans:			#00000000;
+
+	font-sm:	"CodeNewRoman Nerd Font Mono Book 10";
+	font-nm:	"CodeNewRoman Nerd Font Mono Book 12";
+	font-lg:	"CodeNewRoman Nerd Font Mono Book 14";
+
+	font: @font-nm;
+
+	text-color: inherit;
+	background-color: inherit;
+}
+
+#window {
+	
+	width: 30%;
+
+	/* Make the window show up at the bottom of the screen */
+	location:	south;
+	anchor:		south;
+
+	text-color: @foreground;
+	background-color: @trans;
+
+	y-offset: -15px;
+
+}
+
+/* Configure the layout for the main box interactions */
+#mainbox {
+	children: [ message, listview, bottom-bar ];
+}
+
+/**
+ * Create the bottom bar to contain the main input and place the mode switch
+ * on the right.
+ */
+
+#bottom-bar {
+	orientation: horizontal;
+	expand: false;
+	children: [ inputbar, mode-switcher ];
+
+	background-color: @background;
+	padding: 0em 0.5em 0em 1em;
+}
+
+
+#inputbar {
+	expand: true;
+	children: [ textbox-prompt, entry ];
+	padding: 1em 0em 1em 0em;
+}
+
+#textbox-prompt {
+	expand: false;
+	content: ">";
+	font: @font-lg;
+	padding: 0em 0.75em 0 0;
+}
+
+#entry {
+	font: @font-lg;
+}
+
+#mode-switcher {
+	width: 10%;
+}
+
+#button {
+	font: @font-sm;
+
+	padding: 0.55em 0em 0.55em 0em;
+	margin: 0.45em 0 0.45em 0;
+}
+
+#button selected {
+	background-color: @primary;
+	text-color: @primary-bg;
+}
+
+/**
+ * Create the list view
+ */
+
+#listview {
+	scrollbar: false;
+	background-color: @background-t;
+
+	reverse: true;
+	fixed-height: false;
+	lines: 10;
+	dynamic: true;
+
+}
+
+#element {
+	padding: 1em 1em 1em 1em;
+	background-color: @trans;
+}
+
+#element selected {
+	background-color: @primary;
+	text-color: @primary-bg;
+}
+
+#element active {
+	text-color: @primary;
+}
+
+#element urgent {
+	text-color: @alert;
+}
+
+#element-icon {
+	padding: 0 1em 0 0;
+	size: 1.5em;
+}
