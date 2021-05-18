@@ -1,8 +1,20 @@
 /**
- * Josiah Hilden
+ * Josiah Hilden, for i3-notifier window.
  * vim:ft=css
  */
 
+configuration {
+	columns: 1;
+	eh: 2;
+	kb-accept-entry: "Control+j,Control+m,Return,KP_Enter,space";
+	kb-custom-1: "Delete,d";
+	kb-remove-char-forward: "";
+	kb-row-down: "Down,Control+n,j";
+	kb-row-up: "Up,Control+p,k";
+	me-accept-entry: "MousePrimary";
+	me-select-entry: "";
+	show-icons: true;
+}
 
 * {
 	background:		#32302fff;
@@ -53,67 +65,40 @@
 	width: 30%;
 
 	/* Make the window show up at the bottom of the screen */
-	location:	south;
-	anchor:		south;
+	location:	north;
+	anchor:		north;
 
 	text-color: @foreground;
 	background-color: @trans;
 
-	y-offset: -15px;
+	y-offset: 15px;
 
 }
 
 /* Configure the layout for the main box interactions */
 #mainbox {
-	children: [ message, listview, bottom-bar ];
+	children: [ top-bar, listview, message ];
 }
 
 /**
- * Create the bottom bar to contain the main input and place the mode switch
- * on the right.
+ * Create the top bar
  */
-
-#bottom-bar {
-	orientation: horizontal;
+#top-bar {
 	expand: false;
-	children: [ inputbar, mode-switcher ];
-
+	padding: 1em;
+	children: [ top-spacer, textbox-name, top-spacer ];
 	background-color: @background;
-	padding: 0em 0.5em 0em 1em;
+	margin: -5px 0 -5px 0;
 }
 
-
-#inputbar {
+#top-spacer {
 	expand: true;
-	children: [ textbox-prompt, entry ];
-	padding: 1em 0em 1em 0em;
 }
 
-#textbox-prompt {
+#textbox-name {
 	expand: false;
-	content: ">";
 	font: @font-lg;
-	padding: 0em 0.75em 0 0;
-}
-
-#entry {
-	font: @font-lg;
-}
-
-#mode-switcher {
-	width: 10%;
-}
-
-#button {
-	font: @font-sm;
-
-	padding: 0.55em 0em 0.55em 0em;
-	margin: 0.45em 0 0.45em 0;
-}
-
-#button selected {
-	background-color: @primary;
-	text-color: @primary-bg;
+	content: "notifications";
 }
 
 /**
@@ -124,7 +109,7 @@
 	scrollbar: false;
 	background-color: @background-t;
 
-	reverse: true;
+	reverse: false;
 	fixed-height: false;
 	lines: 10;
 	dynamic: true;
