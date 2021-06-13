@@ -85,6 +85,10 @@ function config
 	/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $argv
 end
 
+function op-signin
+	eval (op signin my)
+end
+
 set -U GEM_HOME '~/.gem'
 set -U GEM_PATH '~/.gem'
 
