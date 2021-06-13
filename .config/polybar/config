@@ -47,8 +47,8 @@
 	overline-size = 4
 	underline-size = 4
 
-	border-size = 15
-	border-top-size = 0
+	border-bottom-size = 15
+#border-top-size = 0
 
 	bottom = false
 
@@ -72,9 +72,9 @@
 
 	wm-restack = i3
 
-	modules-left   = time date spacer track-prev track-playpause track-next spotify
+	modules-left   = spacer-fill time date spacer track-prev track-playpause track-next spotify
 	modules-center = i3
-	modules-right  = i3-mode spacer notification spacer volume power
+	modules-right  = i3-mode spacer notification spacer wifi volume power spacer-fill
 
 ; ======== MODULES ========
 
@@ -87,8 +87,11 @@
 	content-padding = 1
 	content = " "
 
-	background = ${colors.background}
-	label-padding = 5
+[module/spacer-fill]
+	type = custom/text
+	content-padding = 1
+	content = " "
+	content-background = ${colors.background}
 
 ; focused = Active workspace on focused monitor
 ; unfocused = Inactive workspace on any monitor
@@ -174,7 +177,7 @@
 	label-foreground = ${colors.spotify-bg}
 	label-padding = 2.5
 
-	exec = /home/oldwomanjosiah/.config/polybar/playing.sh
+	exec = /home/oldwomanjosiah/.config/polybar/playing.sh button play-pause
 	click-left = playerctl --player=spotify play-pause
 
 [module/track-prev]
@@ -238,7 +241,7 @@
 	click-left = "dbus-send --session --print-reply --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.Notifications.ShowNotifications"
 
 [module/volume]
-	type = internal/alsa
+	type = internal/pulseaudio
 
 	format-volume-padding = 2.5
 	format-muted-padding = 2.5
@@ -254,6 +257,28 @@
 	ramp-volume-1 = 
 	ramp-volume-2 = 
 	
+[module/wifi]
+	type = internal/network
+
+	interface = wlp39s0
+
+	format-connected =  <label-connected>
+	format-disconnected = <label-disconnected>
+	format-packetloss =  <label-connected>
+
+	format-connected-padding = 2.5
+	format-disconnected-padding = 2.5
+	format-packetloss-padding = 2.5
+
+	format-connected-background = ${colors.background}
+	format-connected-foreground = ${colors.foreground}
+	format-disconnected-background = ${colors.alert}
+	format-disconnected-foreground = ${colors.alert-bg}
+	format-packetloss-background = ${colors.alert-bg}
+	format-packetloss-foreground = ${colors.alert-bg}
+
+	label-connected = %downspeed:9%
+	label-disconnected = 
 
 [module/power]
 	type = custom/text
