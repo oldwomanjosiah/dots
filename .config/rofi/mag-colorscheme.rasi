@@ -1,0 +1,39 @@
+/**
+ * Josiah Hilden
+ * vim:ft=css
+ */
+
+* {
+	black:			#202A25FF;
+	yellow:			#FFC857FF;
+	blue:			#3B0175FF;
+	magenta:		#DC08ACFF;
+	white:			#FDFCF8FF;
+
+	blue-bri:		#5184FEFF;
+
+	background:		@black;
+	background-t:	#202A2560;
+
+	foreground:		@white;
+
+	primary:		@magenta;
+	primary-bg:		@foreground;
+
+	secondary:		@blue-bri;
+	secondary-bg:	@background;
+
+	alert:			@yellow;
+	alert-bg:		@background;
+
+	trans:			#00000000;
+
+	font-sm:	"CodeNewRoman Nerd Font Mono Book 10";
+	font-nm:	"CodeNewRoman Nerd Font Mono Book 12";
+	font-lg:	"CodeNewRoman Nerd Font Mono Book 14";
+
+	font: @font-nm;
+
+	text-color: inherit;
+	background-color: inherit;
+}
