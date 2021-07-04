@@ -39,7 +39,7 @@ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ to
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
 # Media player controls (Mac keyboard uses pause for both)
-bindsym XF86AudioPause exec playerctl play-pause
+bindsym XF86AudioPause exec "playerctl --player=spotify,chromum play-pause"
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
@@ -178,6 +178,11 @@ mode "resize" {
         bindsym k resize shrink height 2 px or 2 ppt
         bindsym l resize grow width 2 px or 2 ppt
 
+        bindsym Shift+h resize shrink width 10 px or 10 ppt
+        bindsym Shift+j resize grow height 10 px or 10 ppt
+        bindsym Shift+k resize shrink height 10 px or 10 ppt
+        bindsym Shift+l resize grow width 10 px or 10 ppt
+
         # back to normal: Enter or Escape or $mod+r
         bindsym Return mode "default"
         bindsym Escape mode "default"
@@ -207,8 +212,6 @@ exec --no-startup-id nitrogen --restore
 exec --no-startup-id i3-notifier
 exec --no-startup-id compton -cC -i 0.95 --backend glx --vsync --focus-exclude 'class_g = "Rofi"'
 
-exec xmodmap -e "keysym Caps_Lock = Escape"
-exec sleep 5 && xmodmap -e "clear lock" &
 
 # Assign applications to workspaces
 # to get the window class run xprop and click on the window
@@ -220,7 +223,9 @@ for_window [class="Microsoft Teams - Preview"] move to workspace $ws9
 
 # Start stalonekey on startup, then hide it until its called up again
 exec --no-startup-id /home/oldwomanjosiah/.config/stalonetray/start.sh
-exec_always --no-starup-id numlockx on
+
+# Set up the keymaps I like
+exec_always --no-starup-id /home/oldwomanjosiah/.config/i3/keys.sh
 
 mode "tray" {
 	bindsym Escape mode default; exec --no-startup-id /home/oldwomanjosiah/.config/stalonetray/unmap.sh
