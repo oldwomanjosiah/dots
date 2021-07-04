@@ -16,49 +16,8 @@ configuration {
 	show-icons: true;
 }
 
-* {
-	background:		#32302fff;
-	foreground:		#ebdbb2ff;
+@import "mag-colorscheme.rasi"
 
-	background-t:	#32302fb0;
-
-	black:			#282828ff;
-	red:			#cc241dff;
-	green:			#98971aff;
-	yellow:			#d79921ff;
-	blue:			#458588ff;
-	magenta:		#b16286ff;
-	cyan:			#689d6aff;
-	white:			#a89984ff;
-
-    black-bri:		#928374ff;
-    red-bri:		#fb4934ff;
-    green-bri:		#b8bb26ff;
-    yellow-bri:		#fabd2fff;
-    blue-bri:		#83a598ff;
-    magenta-bri:	#d3869bff;
-    cyan-bri:		#8ec07cff;
-    white-bri:		#ebdbb2ff;
-
-	primary:		@cyan-bri;
-	primary-bg:		@background;
-
-	secondary:		@blue;
-
-	alert:			@yellow-bri;
-	alert-bg:		@background;
-
-	trans:			#00000000;
-
-	font-sm:	"CodeNewRoman Nerd Font Mono Book 10";
-	font-nm:	"CodeNewRoman Nerd Font Mono Book 12";
-	font-lg:	"CodeNewRoman Nerd Font Mono Book 14";
-
-	font: @font-nm;
-
-	text-color: inherit;
-	background-color: inherit;
-}
 
 #window {
 	

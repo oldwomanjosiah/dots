@@ -4,37 +4,29 @@
 ; https://github.com/reedrw/dotfiles/blob/master/config/polybar/config
 
 [colors]
-	background	= #ff32302f
-	foreground	= #ffebdbb2
+	black		= #ff202A25
+	yellow		= #ffFFC857
+	blue		= #ff3B0175
+	magenta		= #ffDC08AC
+	white		= #ffFDFCF8
 
-	black		= #ff282828
-	red			= #ffcc241d
-	green		= #ff98971a
-	yellow		= #ffd79921
-	blue		= #ff458588
-	magenta		= #ffb16286
-	cyan		= #ff689d6a
-	white		= #ffa89984
+    blue-bri	= #ff5184FE
 
-    black-bri	= #ff928374
-    red-bri		= #fffb4934
-    green-bri	= #ffb8bb26
-    yellow-bri	= #fffabd2f
-    blue-bri	= #ff83a598
-    magenta-bri = #ffd3869b
-    cyan-bri	= #ff8ec07c
-    white-bri	= #ffebdbb2
 
-	primary		= ${self.cyan-bri}
-	primary-bg	= ${self.background}
+	background	= ${colors.black}
+	foreground	= ${colors.white}
 
-	secondary	= ${self.blue}
 
-	alert		= ${self.yellow-bri}
+	primary		= ${self.magenta}
+	primary-bg	= ${self.foreground}
+
+	secondary	= ${self.blue-bri}
+
+	alert		= ${self.blue-bri}
 	alert-bg	= ${self.background}
 
-	spotify		= ${self.cyan-bri}
-	spotify-bg	= ${self.background}
+	spotify		= ${self.primary}
+	spotify-bg	= ${self.foreground}
 
 
 [bar/base]
@@ -72,7 +64,7 @@
 
 	wm-restack = i3
 
-	modules-left   = spacer-fill time date spacer track-prev track-playpause track-next spotify
+	modules-left   = spacer-primary time date spacer track-prev track-playpause track-next spotify
 	modules-center = i3
 	modules-right  = i3-mode spacer notification spacer wifi volume power spacer-fill
 
@@ -92,6 +84,12 @@
 	content-padding = 1
 	content = " "
 	content-background = ${colors.background}
+
+[module/spacer-primary]
+	type = custom/text
+	content-padding = 1
+	content = " "
+	content-background = ${colors.primary}
 
 ; focused = Active workspace on focused monitor
 ; unfocused = Inactive workspace on any monitor
@@ -221,12 +219,12 @@
 	time = %H:%M
 
 	label = %time%
+	label-padding-right = 5
 
 	format-prefix = " "
 	format = <label>
 	format-background = ${colors.primary}
 	format-foreground = ${colors.primary-bg}
-	format-padding = 5
 
 
 [module/notification]

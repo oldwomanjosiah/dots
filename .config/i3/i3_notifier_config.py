@@ -18,4 +18,4 @@ config_list = [
 ]
 
 
-theme = "sidebar2" # sidebar or widget
+theme = "upper" # sidebar or widget
