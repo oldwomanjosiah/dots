@@ -96,3 +96,7 @@ set -U GEM_PATH '~/.gem'
 export GPG_TTY=(tty)
 
 starship init fish | source
+
+function swim
+	sudo
+end
