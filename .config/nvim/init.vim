@@ -30,13 +30,15 @@ Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 " Language Support
 Plug 'cespare/vim-toml'
 Plug 'stephpy/vim-yaml'
+Plug 'udalov/kotlin-vim'
 Plug 'dag/vim-fish'
 Plug 'rust-lang/rust.vim'
-" Plug 'plasticboy/vim-markdown'
 Plug 'ron-rs/ron.vim'
 Plug 'lervag/vimtex'
-
-" Plug 'harenome/vim-mipssyntax' " CS315 Mips Syntax
+Plug 'tpope/vim-markdown'
+Plug 'oldwomanjosiah/sasylf.vim'
+Plug 'dingdean/wgsl.vim'
+" Plug 'dkarter/bullets.vim'
 
 " GUI
 Plug 'itchyny/lightline.vim'
@@ -88,9 +90,16 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-H> <C-W><C-H>
 nnoremap <C-L> <C-W><C-L>
 
+" Terminal mode remaps
+tnoremap <C-J> <C-\><C-N><C-W><C-J>
+tnoremap <C-K> <C-\><C-N><C-W><C-K>
+tnoremap <C-H> <C-\><C-N><C-W><C-H>
+tnoremap <C-L> <C-\><C-N><C-W><C-L>
+tnoremap <Esc> <C-\><C-N>
+
 " Clear Arrow Keys
 nnoremap <Up> <NoP>
-nnoremap <Down> <NoP>
+nnoremap <Down> <NoP/home/josiah/.local/share/AndroidStudio2021/jre>
 nnoremap <Left> <NoP>
 nnoremap <Right> <NoP>
 
@@ -247,8 +256,8 @@ endfunction
 " Highlight the symbol and its references when holding the cursor.
 " autocmd CursorHold * silent call CocActionAsync('highlight')
 " Show type annotation
-nnoremap <Leader>t :call CocAction('doHover')<Cr>
-nnoremap <Leader>T :call CocAction('doHover')<Cr>
+nnoremap <Leader>d :call CocAction('doHover')<Cr>
+nnoremap <Leader>D :call CocAction('doHover')<Cr>
 
 nnoremap <silent> <Leader>a :CocAction<Cr>
 
@@ -256,6 +265,10 @@ nnoremap <silent> <Leader>a :CocAction<Cr>
 " Example: `<leader>aap` for current paragraph
 xmap <leader>a  <Plug>(coc-codeaction-selected)
 nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+nnoremap <M-Enter> <Plug>(coc-codeaction-selected)iw
+inoremap <M-Enter> <Plug>(coc-codeaction-selected)iw
+xnoremap <M-Enter> <Plug>(coc-codeaction-selected)iw
 
 " Apply AutoFix to problem on the current line.
 nmap <leader>i  <Plug>(coc-fix-current)
@@ -272,28 +285,24 @@ omap ac <Plug>(coc-classobj-a)
 
 set noshowmode
 
-" Vista Options
-let g:vista_default_executive = 'coc'
-let g:vista#renderer#enable_icon = 1
-let g:vista_fzf_preview = ['right:50%']
-let g:vista_echo_cursor_strategy = 'scroll'
-
-nnoremap <silent> <Leader>vf :Vista finder<Cr>
-nnoremap <silent> <Leader>vv :Vista!!<Cr>
-
-" Start fzf if opened without file specified
-" autocmd StdinReadPre * let s:std_in=1
-" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | call fzf#vim#files(".", 0) | endif
-
 " Rust specific options
 autocmd BufNewFile,BufRead *.rs setlocal colorcolumn=100
 
-" Vimtex filetype options
+" Vimtex and markdown filetype options
 let g:tex_flavor = 'latex'
-autocmd BufNewFile,BufRead *.tex setlocal textwidth=80 spell spelllang=en_us
+autocmd BufNewFile,BufRead *.tex,*.md setlocal textwidth=80 spell spelllang=en_us
+autocmd BufNewFile,BufRead *.md setlocal linebreak ts=2 sw=2 expandtab
+
+let g:bullets_enabled_filetypes = []
+let g:markdown_fenced_languages = ['html', 'python', 'kotlin', 'rust', 'bash=sh']
 
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
+
+
+map <Leader>shl :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
 " Use auocmd to force lightline update.
 autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
