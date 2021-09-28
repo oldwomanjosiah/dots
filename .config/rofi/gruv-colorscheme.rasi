@@ -4,10 +4,11 @@
  */
 
 * {
-	background:		#32302fff;
-	foreground:		#ebdbb2ff;
+	bak-black:		#32302fff;
+	bak-white:		#ebdbb2ff;
 
-	background-t:	#32302fb0;
+	bak-black-t:	#32302fb0;
+	bak-white-t:	#ebdbb290;
 
 	black:			#282828ff;
 	red:			#cc241dff;
@@ -27,6 +28,10 @@
     cyan-bri:		#8ec07cff;
     white-bri:		#ebdbb2ff;
 
+	foreground:		@bak-white;
+	background:		@bak-black;
+	background-t:	@bak-black-t;
+
 	primary:		@cyan-bri;
 	primary-bg:		@background;
 
@@ -40,6 +45,10 @@
 	font-sm:	"CodeNewRoman Nerd Font Mono Book 10";
 	font-nm:	"CodeNewRoman Nerd Font Mono Book 12";
 	font-lg:	"CodeNewRoman Nerd Font Mono Book 14";
+
+	font-sm-bold:	"CodeNewRoman Nerd Font Mono Bold 10";
+	font-nm-bold:	"CodeNewRoman Nerd Font Mono Bold 12";
+	font-lg-bold:	"CodeNewRoman Nerd Font Mono Bold 14";
 
 	font: @font-nm;
 

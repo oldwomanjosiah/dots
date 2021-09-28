@@ -1,0 +1,20 @@
+/**
+ * Josiah Hilden
+ * vim:ft=css
+ */
+
+@import "gruv-colorscheme.rasi"
+
+* {
+	foreground:		@bak-black;
+	background:		@bak-white;
+	background-t:	@bak-white-t;
+	
+	primary:		@red-bri;
+	primary-bg:		@background;
+
+	secondary:		@blue-bri;
+
+	alert:			@yellow-bri;
+	alert-bg:		@foreground;
+}
