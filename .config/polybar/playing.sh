@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if playerctl --player=spotify status | grep -q "Paused"; then
+if playerctl --player=spotify,chromium status | grep -q "Paused"; then
 	echo ""
 else
 	echo ""

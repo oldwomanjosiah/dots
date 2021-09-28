@@ -3,22 +3,41 @@
 ; Inspired by:
 ; https://github.com/reedrw/dotfiles/blob/master/config/polybar/config
 
+; Magenta Colorscheme
+; black		= #ff202A25
+; yellow		= #ffFFC857
+; blue		= #ff3B0175
+; magenta		= #ffDC08AC
+; white		= #ffFDFCF8
+; 
+; blue-bri	= #ff5184FE
+
 [colors]
-	black		= #ff202A25
-	yellow		= #ffFFC857
-	blue		= #ff3B0175
-	magenta		= #ffDC08AC
-	white		= #ffFDFCF8
 
-    blue-bri	= #ff5184FE
+    black		= #ff282828
+    red			= #ffcc241d
+    green		= #ff98971a
+    yellow		= #ffd79921
+    blue		= #ff458588
+    magenta		= #ffb16286
+    cyan		= #ff689d6a
+    gray		= #ffa89984
+
+    black-bri	= #ff928374
+    red-bri		= #fffb4934
+    green-bri	= #ffb8bb26
+    yellow-bri	= #fffabd2f
+    blue-bri	= #ff83a598
+    magenta-bri	= #ffd3869b
+    cyan-bri	= #ff8ec07c
+    white		= #ffebdbb2
+
+	background	= ${colors.white}
+	foreground	= ${colors.black}
 
 
-	background	= ${colors.black}
-	foreground	= ${colors.white}
-
-
-	primary		= ${self.magenta}
-	primary-bg	= ${self.foreground}
+	primary		= ${self.red-bri}
+	primary-bg	= ${self.background}
 
 	secondary	= ${self.blue-bri}
 
@@ -39,10 +58,6 @@
 	overline-size = 4
 	underline-size = 4
 
-	border-bottom-size = 15
-#border-top-size = 0
-
-	bottom = false
 
 	fixed-center = true
 	tray-position = none
@@ -60,13 +75,18 @@
 [bar/main]
 	inherit = bar/base
 
+	border-bottom-size = 15
+
 	bottom = true
 
 	wm-restack = i3
 
-	modules-left   = spacer-primary time date spacer track-prev track-playpause track-next spotify
+	modules-left = spacer-primary time date spacer track-prev track-playpause track-next spotify
 	modules-center = i3
-	modules-right  = i3-mode spacer notification spacer wifi volume power spacer-fill
+	modules-right = i3-mode spacer memory wifi spacer volume spacer-fill
+# modules-left   = spacer-primary time date spacer track-prev track-playpause track-next spotify
+# modules-center = i3
+# modules-right  = i3-mode spacer notification spacer wifi volume power spacer-fill
 
 ; ======== MODULES ========
 
@@ -114,9 +134,9 @@
 	index-sort = true
 	wrapping-scroll = false
 
-	ws-icon-0 = 1;
+	ws-icon-0 = 1;
 	ws-icon-1 = 2;
-	ws-icon-2 = 3;3
+	ws-icon-2 = 3;
 	ws-icon-3 = 4;4
 	ws-icon-4 = 5;5
 	ws-icon-5 = 6;6
@@ -156,12 +176,14 @@
 	format-prefix-padding = 2.5
 	format-right-padding = 2.5
 
-	format-background = ${colors.black}
+	format-foreground = ${colors.foreground}
+	format-background = ${colors.primary}
 
+	label-foreground = ${colors.foreground}
 	label-background = ${colors.background}
 	label-padding = 5
 
-	exec = python3 /home/oldwomanjosiah/github/scripts/polybar-spotify/spotify_status.py -f '{artist}: {song}' -t 30
+	exec = python3 /home/josiah/oss/polybar-spotify/spotify_status.py -f '{artist}: {song}' -t 30
 	format-underline = ${colors.spotify}
 
 	click-left = i3 workspace 10
@@ -175,7 +197,7 @@
 	label-foreground = ${colors.spotify-bg}
 	label-padding = 2.5
 
-	exec = /home/oldwomanjosiah/.config/polybar/playing.sh button play-pause
+	exec = /home/josiah/.config/polybar/playing.sh button play-pause
 	click-left = playerctl --player=spotify play-pause
 
 [module/track-prev]
@@ -186,7 +208,7 @@
 	content-padding = 2.5
 
 	content = ""
-	click-left = playerctl previous
+	click-left = playerctl --player=spotify,chromium previous
 
 [module/track-next]
 	type = custom/text
@@ -196,7 +218,7 @@
 	content-padding = 2.5
 
 	content = ""
-	click-left = playerctl next
+	click-left = playerctl --player=spotify,chromium next
 
 [module/date]
 	type = internal/date
@@ -204,7 +226,6 @@
 
 	format-background = ${colors.background}
 	format-padding = 5
-
 
 	date = "%A %b %d"
 ;	date-alt = "%Y-%m-%d"
@@ -254,11 +275,31 @@
 	ramp-volume-0 = 
 	ramp-volume-1 = 
 	ramp-volume-2 = 
+
+[module/memory]
+	type = internal/memory
+	interval = 1
+	format = <label> <bar-used>
+
+	format-padding = 2.5
+	format-background = ${colors.background}
+
+	label = %percentage_used%% %percentage_swap_used%%
+
+	bar-used-indicator =
+	bar-used-width = 10
+	bar-used-foreground-0 = ${colors.primary}
+	bar-used-foreground-1 = ${colors.foreground}
+#	bar-used-foreground-2 = #f5a70a
+#	bar-used-foreground-3 = #ff5555
+	bar-used-fill = ═
+	bar-used-empty = ═
+	bar-used-empty-foreground = ${colors.foreground}
 	
 [module/wifi]
 	type = internal/network
 
-	interface = wlp39s0
+	interface = wlan0
 
 	format-connected =  <label-connected>
 	format-disconnected = <label-disconnected>
