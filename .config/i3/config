@@ -25,11 +25,12 @@ font pango:CodeNewRoman Nerd Font Mono 8
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork -i /home/oldwomanjosiah/backgrounds/Mountain-pre.png
+exec --no-startup-id xss-lock --transfer-sleep-lock -- light-locker-command -l
+bindsym $mod+Control+l exec light-locker-command -l
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
-exec --no-startup-id nm-applet
+# exec --no-startup-id nm-applet
 
 # Use pactl to adjust volume in PulseAudio.
 # set $refresh_i3status killall -SIGUSR1 i3status
@@ -50,11 +51,11 @@ floating_modifier $mod
 bindsym $mod+Return exec $terminal
 
 # Open i3-notification
-bindsym $mod+n exec dbus-send --session --print-reply --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.Notifications.ShowNotifications
+# bindsym $mod+n exec dbus-send --session --print-reply --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.Notifications.ShowNotifications
 
 # Select and take a screenshot
 
-set $scrot_path '/home/oldwomanjosiah/Pictures/screenshot/%Y-%m-%d_%H:%M:%S_selection.png'
+set $scrot_path '/home/josiah/screenshot/%Y-%m-%d_%H:%M:%S_selection.png'
 set $scrot_copy 'xclip -selection c -t image/png < $f'
 set $scrot_prefix $Mod+Control
 
@@ -203,18 +204,19 @@ exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 
 # screenlock
-bindsym Control+Mod1+l exec gnome-screensaver-command -l
+# bindsym Control+Mod1+l exec gnome-screensaver-command -l
 
 # background image
 # exec --no-startup-id feh --bg-scale /home/oldwomanjosiah/backgrounds/Mountain.png
-exec --no-startup-id nitrogen --restore
+# exec --no-startup-id nitrogen --restore
 
-exec --no-startup-id i3-notifier
-exec --no-startup-id compton -cC -i 0.95 --backend glx --vsync --focus-exclude 'class_g = "Rofi"'
+# exec --no-startup-id i3-notifier
+# exec --no-startup-id compton -cC -i 0.95 --backend glx --vsync --focus-exclude 'class_g = "Rofi"'
 
 
 # Assign applications to workspaces
 # to get the window class run xprop and click on the window
+assign [class="Todost"] $ws1
 assign [class="Brave-browser"] $ws2
 for_window [class="Spotify"] move to workspace $ws10
 assign [class="Steam"] $ws8
@@ -222,17 +224,17 @@ assign [class="discord"] $ws9
 for_window [class="Microsoft Teams - Preview"] move to workspace $ws9
 
 # Start stalonekey on startup, then hide it until its called up again
-exec --no-startup-id /home/oldwomanjosiah/.config/stalonetray/start.sh
+# exec --no-startup-id /home/oldwomanjosiah/.config/stalonetray/start.sh
 
 # Set up the keymaps I like
-exec_always --no-starup-id /home/oldwomanjosiah/.config/i3/keys.sh
+# exec_always --no-starup-id /home/oldwomanjosiah/.config/i3/keys.sh
 
 mode "tray" {
-	bindsym Escape mode default; exec --no-startup-id /home/oldwomanjosiah/.config/stalonetray/unmap.sh
-	bindsym $mod+Shift+t mode default; exec --no-startup-id /home/oldwomanjosiah/.config/stalonetray/unmap.sh
+	bindsym Escape mode default; exec --no-startup-id $HOME/.config/stalonetray/unmap.sh
+	bindsym $mod+Shift+t mode default; exec --no-startup-id $HOME/.config/stalonetray/unmap.sh
 }
 
-bindsym $mod+Shift+t mode tray; exec --no-startup-id /home/oldwomanjosiah/.config/stalonetray/map.sh
+bindsym $mod+Shift+t mode tray; exec --no-startup-id $HOME/.config/stalonetray/map.sh
 
 # redshift controls
 bindsym $mod+Shift+W mode "$mode_redshift"
