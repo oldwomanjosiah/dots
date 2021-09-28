@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# Josiah Hilden (2021)
+# lightdm xinit
+
+picom --backend glx &
+nitrogen --restore &
+stalonetray &
+nm-applet &
+$HOME/.config/invert_scroll.sh
+numlockx &
+light-locker &
+eval $(ssh-agent)
+ssh-add $HOME/.ssh/id_rsa
+$HOME/.config/stalonetray/unmap.sh
+export JAVA_HOME=/home/josiah/.local/share/AndroidStudio2021/jre/
