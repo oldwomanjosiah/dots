@@ -3,29 +3,22 @@ let mapleader=" "
 
 " {{{ Plugins
 call plug#begin('~/.config/nvim/bundles')
-Plug 'morhetz/gruvbox'
+" Plug 'morhetz/gruvbox'
+Plug 'sainnhe/edge'
+Plug 'dracula/vim', { 'as': 'dracula' }
 
 " Fuzzy Finding (Replacing Nerdtree)
 " Plug 'airblade/vim-rooter'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+" Plug 'junegunn/fzf.vim'
 
 Plug 'preservim/nerdtree' |
  \ Plug 'Xuyuanp/nerdtree-git-plugin' |
  \ Plug 'ryanoasis/vim-devicons'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
-" Language Client for RLS
-Plug 'autozimu/LanguageClient-neovim', {
-		\ 'branch': 'next',
-		\ 'do': 'bash install.sh',
-		\ }
-
-" Tags Pane
-Plug 'liuchengxu/vista.vim'
-
 " AutoCompletion
-Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+" Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
 " Language Support
 Plug 'cespare/vim-toml'
@@ -38,17 +31,69 @@ Plug 'lervag/vimtex'
 Plug 'tpope/vim-markdown'
 Plug 'oldwomanjosiah/sasylf.vim'
 Plug 'dingdean/wgsl.vim'
+Plug 'elkowar/yuck.vim'
+
+" Package Deps
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+
+" Telescope
+Plug 'nvim-telescope/telescope.nvim'
+
+" Git
+Plug 'lewis6991/gitsigns.nvim'
+
+" Built-in LSP
+Plug 'neovim/nvim-lspconfig'
+Plug 'ray-x/lsp_signature.nvim'
+Plug 'simrat39/rust-tools.nvim'
+Plug 'tjdevries/nlua.nvim'
+
+" Tree-Sitter
+Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
+
+" Snippets
+Plug 'L3MON4D3/LuaSnip'
+
+" Projects
+Plug 'ahmedkhalf/project.nvim'
+
+" Debugging
+Plug 'mfussenegger/nvim-dap'
+
+" Completion
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'f3fora/cmp-spell'
+Plug 'onsails/lspkind-nvim'
+Plug 'saadparwaiz1/cmp_luasnip'
+Plug 'saecki/crates.nvim'
+
 " Plug 'dkarter/bullets.vim'
+" This is currently removed because it broke code blocks
 
 " GUI
 Plug 'itchyny/lightline.vim'
-Plug 'oldwomanjosiah/lightline-gruvbox.vim'
+" Plug 'oldwomanjosiah/lightline-gruvbox.vim'
 Plug 'mengelbrecht/lightline-bufferline'
 
 Plug 'ryanoasis/vim-devicons'
+
+Plug 'akinsho/toggleterm.nvim'
+Plug 'tpope/vim-surround'
+Plug 'ggandor/lightspeed.nvim'
 call plug#end()
 
 " }}}
+
+" Set Colorscheme
+let g:edge_diagnostic_virtual_text = 'colored'
+let g:edge_style = 'default'
+let g:edge_transparent_background = 0
+colorscheme edge
+
 
 " Main Section
 set tabstop=4
@@ -99,7 +144,7 @@ tnoremap <Esc> <C-\><C-N>
 
 " Clear Arrow Keys
 nnoremap <Up> <NoP>
-nnoremap <Down> <NoP/home/josiah/.local/share/AndroidStudio2021/jre>
+nnoremap <Down> <NoP>
 nnoremap <Left> <NoP>
 nnoremap <Right> <NoP>
 
@@ -118,12 +163,6 @@ set splitbelow
 set undodir=~/.config/nvim/.nvimdid
 set undofile
 
-" Fzf Shortcuts
-nnoremap <Leader>b :Buffers<Cr>
-nnoremap <C-p> :GFiles<Cr>
-nnoremap <Leader>o :Files<Cr>
-nnoremap <Leader>f :Rg<Cr>
-
 " Nerdtree
 nnoremap <Leader>nt :NERDTreeToggle<Cr>
 nnoremap <Leader>nn :NERDTreeFocus<Cr>
@@ -136,65 +175,20 @@ autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTr
 autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
     \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
 
-" Start nerdtree if vim started without a file
+" Start nerdtree with vim
 autocmd VimEnter * NERDTree | wincmd p
 
 " NERDTreeGit
 let g:NERDTreeGitStatusUseNerdFonts = 1
 let g:NERDTreeGitStatusShowIgnored = 1
+let g:NERDTreeChDirMode = 2
 
 " Tex reflow paragraph
 nnoremap <Leader>rf :norm gqip<Cr>
 vnoremap <Leader>rf gq<Cr>
 
-" coc options
-nnoremap <Silent> <Leader>f :call CocAction('format')<Cr>
-nnoremap <Leader>s :CocList outline<Cr>
-
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-nmap <leader>rn <Plug>(coc-rename)
-
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-"
-" Map function and class text objects
-" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap af <Plug>(coc-funcobj-a)
-
-" 'Smart' nevigation
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Use <c-.> to trigger completion.
-inoremap <silent><expr> <c-.> coc#refresh()
-
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
-" position. Coc only does snippet and additional edit on confirm.
-if exists('*complete_info')
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-else
-  imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-endif
-
 nnoremap <Leader><Leader> <C-^> " Map space-spcae to go to most recent buffer
+set noshowmode
 
 " Unhighlight searches
 nnoremap <Leader>h :nohlsearch<Cr>
@@ -202,17 +196,20 @@ vnoremap <Leader>h :nohlsearch<Cr>
 
 " Lightline Options
 let g:lightline#bufferline#unicode_symbols=1
-let g:lightline_gruvbox_color='both'
+" let g:lightline_gruvbox_color='both'
 set showtabline=2
 if !has('gui_running')
   set t_Co=256
 endif
 
+set termguicolors
+
+"				[ 'cocstatus' ], removed from lightline config
+
 let g:lightline = {
-		\   'colorscheme': 'gruvbox',
+		\   'colorscheme': 'edge',
 		\   'active': {
 		\     'left': [ [ 'mode', 'paste' ],
-		\				[ 'cocstatus' ],
 		\               [ 'readonly', 'filename', 'modified' ] ],
 		\     'right':[ [ 'gitstatus' ],
 		\				[ 'percent' ],
@@ -243,48 +240,6 @@ function! LightlineGitStatus() abort
 	return winwidth(0) > 100 ? status : ''
 endfunction
 
-" Coc
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
-" Highlight the symbol and its references when holding the cursor.
-" autocmd CursorHold * silent call CocActionAsync('highlight')
-" Show type annotation
-nnoremap <Leader>d :call CocAction('doHover')<Cr>
-nnoremap <Leader>D :call CocAction('doHover')<Cr>
-
-nnoremap <silent> <Leader>a :CocAction<Cr>
-
-" Applying codeAction to the selected region.
-" Example: `<leader>aap` for current paragraph
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
-
-nnoremap <M-Enter> <Plug>(coc-codeaction-selected)iw
-inoremap <M-Enter> <Plug>(coc-codeaction-selected)iw
-xnoremap <M-Enter> <Plug>(coc-codeaction-selected)iw
-
-" Apply AutoFix to problem on the current line.
-nmap <leader>i  <Plug>(coc-fix-current)
-
-" Coc code regions
-xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap af <Plug>(coc-funcobj-a)
-xmap ic <Plug>(coc-classobj-i)
-omap ic <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
-
-set noshowmode
-
 " Rust specific options
 autocmd BufNewFile,BufRead *.rs setlocal colorcolumn=100
 
@@ -292,20 +247,20 @@ autocmd BufNewFile,BufRead *.rs setlocal colorcolumn=100
 let g:tex_flavor = 'latex'
 autocmd BufNewFile,BufRead *.tex,*.md setlocal textwidth=80 spell spelllang=en_us
 autocmd BufNewFile,BufRead *.md setlocal linebreak ts=2 sw=2 expandtab
+autocmd BufNewFile,BufRead *.c,*.h setlocal ts=2 sw=2 expandtab
 
-let g:bullets_enabled_filetypes = []
+" Sasylf Special
+autocmd BufNewFile,BufRead *.slf nnoremap <silent> <C-Space>
+			\ :cexpr system('sasylf ' . expand('%:p')) <bar> :copen<CR>
+
 let g:markdown_fenced_languages = ['html', 'python', 'kotlin', 'rust', 'bash=sh']
-
-" [Buffers] Jump to the existing window if possible
-let g:fzf_buffers_jump = 1
-
 
 map <Leader>shl :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
 " Use auocmd to force lightline update.
-autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
+" autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 " Completion
 " Better display for messages
 set cmdheight=2
@@ -315,5 +270,17 @@ set updatetime=300
 " Foldmethod
 set foldmethod=marker
 
-" Set Colorscheme
-colorscheme gruvbox
+" ToggleTerm
+lua << EOF
+require 'oldwomanjosiah'.setup {}
+EOF
+
+hi def link LspDiagnosticsDefaultError Error
+hi def link LspDiagnosticsDefaultWarning Debug
+hi def link LspDiagnosticsDefaultInformation Todo
+hi def link LspDiagnosticsDefaultHint Todo
+
+let g:toggleterm_terminal_mapping = '<C-t>'
+
+" let g:neovide_cursor_animation_length=0.01
+" set guifont=CodeNewRoman\ Nerd\ Font\ Mono:8
