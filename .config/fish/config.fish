@@ -100,3 +100,8 @@ starship init fish | source
 function swim
 	sudo
 end
+
+set -ua PATH /home/josiah/.cargo/bin/
+
+# opam configuration
+source /home/josiah/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
