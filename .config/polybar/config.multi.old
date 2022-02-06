@@ -12,115 +12,98 @@
 ; 
 ; blue-bri	= #ff5184FE
 
-[pinkGlass]
-    pink = #ffF795C2
-	dblue = #ff3E77C6
-	lblue = #ff6891D4
-	black = #ff080705
-	offwhite = #ffECE0D9
-
-    pink-t = #9fF795C2
-	dblue-t = #9f3E77C6
-	lblue-t = #9f6891D4
-	black-t = #9f080705
-	offwhite-f = #efECE0D9
-	offwhite-t = #3fECE0D9
-	offwhite-tt = #1fECE0D9
-	offwhite-ttd = #1f515A49
-
-[edgeSolid]
-	background = #ff2c2e34
-	foreground = #ffc5cdd9
-
-	black = #ff3e4249
-	red = #ffec7279
-	green = #ffa0c980
-	yellow = #ffdeb974
-	blue = #ff6cb6eb
-	magenta = #ffd38aea
-	cyan = #ff5dbbc1
-	white = #ffc5cdd9
-
-	blackBri = #ff3e4249
-	redBri = #ffec7279
-	greenBri = #ffa0c980
-	yellowBri = #ffdeb974
-	blueBri = #ff6cb6eb
-	magentaBri = #ffd38aea
-	cyanBri = #ff5dbbc1
-	whiteBri = #ffc5cdd9
-
 [colors]
 
-	trans = #00000000
+    black		= #ff282828
+    red			= #ffcc241d
+    green		= #ff98971a
+    yellow		= #ffd79921
+    blue		= #ff458588
+    magenta		= #ffb16286
+    cyan		= #ff689d6a
+    gray		= #ffa89984
 
-	border = #88888888
+    black-bri	= #ff928374
+    red-bri		= #fffb4934
+    green-bri	= #ffb8bb26
+    yellow-bri	= #fffabd2f
+    blue-bri	= #ff83a598
+    magenta-bri	= #ffd3869b
+    cyan-bri	= #ff8ec07c
+    white		= #ffebdbb2
 
-	primary = ${edgeSolid.magenta}
-	on-primary = ${edgeSolid.background}
+	background	= ${colors.white}
+	foreground	= ${colors.black}
 
-	secondary = ${edgeSolid.green}
-	on-secondary = ${edgeSolid.background}
 
-	foreground = ${edgeSolid.foreground}
-	background = ${edgeSolid.background}
+	primary		= ${self.red-bri}
+	primary-bg	= ${self.background}
+
+	secondary	= ${self.blue-bri}
+	secondary-bg	= ${self.background}
+
+	alert		= ${self.blue-bri}
+	alert-bg	= ${self.background}
+
+	spotify		= ${self.primary}
+	spotify-bg	= ${self.foreground}
 
 
 [bar/base]
 	width = 100%
-	height = 30
+	height = 36
 	monitor = ${env:MONITOR:}
 
 	foreground = ${colors.foreground}
-	background = ${colors.background}
+	background = #00000000
 
-	overline-size = 7
-	underline-size = 7
+	overline-size = 4
+	underline-size = 4
 
-	#border-bottom-size = 7
-	#border-top-size = 7
-	#border-color = ${colors.background}
 
 	fixed-center = true
 	tray-position = none
 
-	bottom = false
-	;border-bottom-size = 2
-	;border-bottom-color = ${colors.border}
-	;radius-bottom = 10.0
-
-	wm-restack = i3
-
 	cursor-click = pointer
 	cursor-scroll = ns-resize
 
-	font-0 = Inter Regular:italic=true:pixelsize=13;2
-	font-1 = Font Awesome 5 Free:pixelsize=15;3
-	font-2 = Font Awesome 5 Free Solid:pixelsize=15;3
-	font-3 = Font Awesome 5 Brands:pixelsize=15;3
-	;font-1 = fixfont:pixelsize=12;2
-	;font-2 = unifont:fontformat=truetype:size=12:antialias=true;2
-	;font-3 = siji:pixelsize=12;2
+	font-0 = fixfont:pixelsize=12;2
+	font-1 = unifont:fontformat=truetype:size=12:antialias=true;2
+	font-2 = siji:pixelsize=12;2
+	font-3 = Font Awesome 5 Free:pixelsize=13;2
+	font-4 = Font Awesome 5 Free Solid:pixelsize=13;2
+	font-5 = Font Awesome 5 Brands:pixelsize=13;2
 
 [bar/left]
 	inherit = bar/base
 
-	#modules-left = spacer-primary time date spacer track-prev track-playpause track-next
-	modules-left = spacer i3 spacer i3-mode
-	modules-center = time
-	modules-right = date spacer
+	border-bottom-size = 15
+
+	bottom = true
+
+	wm-restack = i3
+
+	modules-left = spacer-primary time date spacer track-prev track-playpause track-next
+	modules-center = i3
+	modules-right = volume spacer-fill
 
 [bar/right]
 	inherit = bar/base
 
-	modules-left = spacer i3 spacer i3-mode
-	modules-center = time
-	modules-right = wifi spacer volume spacer
+	border-bottom-size = 15
+
+	bottom = true
+
+	wm-restack = i3
+
+	modules-left =
+	modules-center = i3
+	modules-right = i3-mode spacer memory wifi spacer-fill
 
 ; ======== MODULES ========
 
 [module/base]
-	label-background = ${colors.trans}
+	label-background = ${colors.background}
 	label-padding = 5
 
 [module/spacer]
@@ -132,7 +115,7 @@
 	type = custom/text
 	content-padding = 1
 	content = " "
-	content-background = ${colors.trans}
+	content-background = ${colors.background}
 
 [module/spacer-primary]
 	type = custom/text
@@ -152,14 +135,14 @@
 	format = <label-mode>
 
 	label-mode-padding = 3
-	label-mode-foreground = ${colors.on-secondary}
-	label-mode-background = ${colors.secondary}
+	label-mode-foreground = ${colors.background}
+	label-mode-background = ${colors.alert}
 	label-mode = %mode%
 
 [module/i3]
 	type = internal/i3
 
-	pin-workspaces = true
+#pin-workspaces = true
 	format = <label-state>
 	index-sort = true
 	wrapping-scroll = false
@@ -177,25 +160,23 @@
 
 	label-focused = %icon%
 	label-focused-background = ${colors.primary}
-	label-focused-foreground = ${colors.on-primary}
-	#label-focused-overline = ${colors.primary}
-	#label-focused-underline = ${colors.primary}
-	#label-focused-foreground = ${colors.primary}
+	label-focused-foreground = ${colors.primary-bg}
+	label-focused-overline = ${colors.primary}
 	label-focused-padding = 3
 
 	label-unfocused = %icon%
-	#label-unfocused-background = ${colors.background}
+	label-unfocused-background = ${colors.background}
 	label-unfocused-padding = 3
 
 	label-visible = %icon%
-	label-visible-background = ${colors.secondary}
-	label-visible-foreground = ${colors.on-secondary}
+	label-visible-foreground = ${colors.primary}
+	label-visible-background = ${colors.primary-bg}
 ;	label-visible-underline = ${self.label-focused-underline}
 	label-visible-padding = 3
 
 	label-urgent = %icon%
-	#label-urgent-background = ${colors.alert}
-	#label-urgent-foreground = ${colors.alert-bg}
+	label-urgent-background = ${colors.alert}
+	label-urgent-foreground = ${colors.alert-bg}
 	label-urgent-padding = 3
 
 
@@ -257,8 +238,8 @@
 	type = internal/date
 	interval = 5
 
-	#format-background = ${colors.background}
-	label-padding = 2
+	format-background = ${colors.background}
+	format-padding = 5
 
 	date = "%A %b %d"
 ;	date-alt = "%Y-%m-%d"
@@ -273,11 +254,13 @@
 	time = %H:%M
 
 	label = %time%
+	label-padding-right = 5
 
 	format-prefix = " "
 	format = <label>
-	#format-background = ${colors.primary-t}
-	#format-foreground = ${colors.primary-bg}
+	format-background = ${colors.primary}
+	format-foreground = ${colors.primary-bg}
+
 
 [module/notification]
 	type = "custom/script"
@@ -293,10 +276,10 @@
 [module/volume]
 	type = internal/pulseaudio
 
-	#format-volume-padding = 2.5
-	#format-muted-padding = 2.5
-	#format-volume-background = ${colors.background}
-	format-muted-foreground = ${colors.primary}
+	format-volume-padding = 2.5
+	format-muted-padding = 2.5
+	format-volume-background = ${colors.background}
+	format-muted-background = ${colors.background}
 
 	format-volume = <ramp-volume>   <label-volume>
 	format-muted  = <label-muted>
@@ -305,10 +288,7 @@
 
 	ramp-volume-0 = 
 	ramp-volume-1 = 
-	ramp-volume-2 = 
-	ramp-volume-3 = 
-	ramp-volume-4 = 
-	ramp-volume-5 = 
+	ramp-volume-2 = 
 
 [module/memory]
 	type = internal/memory
@@ -316,7 +296,7 @@
 	format = <label> <bar-used>
 
 	format-padding = 2.5
-	#format-background = ${colors.background}
+	format-background = ${colors.background}
 
 	label = %percentage_used%% %percentage_swap_used%%
 
@@ -336,20 +316,19 @@
 	interface = wlan0
 
 	format-connected =  <label-connected>
-	format-disconnected = 
-	#<label-disconnected>
+	format-disconnected = <label-disconnected>
 	format-packetloss =  <label-connected>
 
 	format-connected-padding = 2.5
 	format-disconnected-padding = 2.5
 	format-packetloss-padding = 2.5
 
-	#format-connected-background = ${colors.background}
-	#format-connected-foreground = ${colors.foreground}
-	#format-disconnected-background = ${colors.primary}
-	format-disconnected-foreground = ${colors.primay}
-	#format-packetloss-background = ${colors.alert-bg}
-	format-packetloss-foreground = ${colors.alert}
+	format-connected-background = ${colors.background}
+	format-connected-foreground = ${colors.foreground}
+	format-disconnected-background = ${colors.primary}
+	format-disconnected-foreground = ${colors.primay-bg}
+	format-packetloss-background = ${colors.alert-bg}
+	format-packetloss-foreground = ${colors.alert-bg}
 
 	label-connected = %downspeed:9% %signal%
 	label-disconnected = 
@@ -363,12 +342,11 @@
 	content = 
 
 	click-left = rofi -show power-menu -modi power-menu:rofi-power-menu
-
 ; {{{ Settings
 
 [settings]
 screenchange-reload = true
-;compositing-background = subtract
+;compositing-background = xor
 ;compositing-background = screen
 ;compositing-foreground = source
 ;compositing-border = over
