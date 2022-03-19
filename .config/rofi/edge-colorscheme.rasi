@@ -1,0 +1,48 @@
+/**
+ * Josiah Hilden
+ * vim:ft=css
+ */
+
+* {
+	trans:			#00000000;
+
+	background: #2c2e34ff;
+	foreground: #c5cdd9ff;
+
+	black: #3e4249ff;
+	red: #ec7279ff;
+	green: #a0c980ff;
+	yellow: #deb974ff;
+	blue: #6cb6ebff;
+	magenta: #d38aeaff;
+	cyan: #5dbbc1ff;
+	white: #c5cdd9ff;
+
+	blackBri: #3e4249ff;
+	redBri: #ec7279ff;
+	greenBri: #a0c980ff;
+	yellowBri: #deb974ff;
+	blueBri: #6cb6ebff;
+	magentaBri: #d38aeaff;
+	cyanBri: #5dbbc1ff;
+	whiteBri: #c5cdd9ff;
+
+	// foreground:		@black;
+	// background:		@offwhite-t;
+	background-t:	@blackBri;
+	
+	primary:		@magenta;
+	primary-bg:		@background;
+
+	secondary:		@green;
+
+	alert:			@red;
+	alert-bg:		@background;
+
+	// Hide unset backgrounds
+	background-color: @trans;
+
+	font-sm: "Inter Regular 13";
+	font-md: "Inter Bold 13";
+	font-lg: "Inter SemiBold 18";
+}

@@ -3,27 +3,32 @@
  * vim:ft=css
  */
 
-@import "pink-colorscheme.rasi"
+@import "edge-colorscheme.rasi"
 
 #window {
 	
 	width: 30%;
+	y-offset: 5%;
 
 	/* Make the window show up at the bottom of the screen */
-	location:	south;
-	anchor:		south;
+	location:	north;
+	anchor:		north;
 
 	text-color: @foreground;
 	background-color: @background-t;
 
-	y-offset: -15px;
+	//border-radius: 7;
+	//padding: 0 0 0 7px;
+	//x-offset: -7px;
+
+	//y-offset: 30px;
 
 }
 
 /* Configure the layout for the main box interactions */
 #mainbox {
-	children: [ message, listview, bottom-bar ];
-	spacing: 0;
+	children: [ message, bottom-bar, listview ];
+	spacing: 0px;
 }
 
 /**
@@ -32,50 +37,60 @@
  */
 
 #bottom-bar {
-	orientation: horizontal;
+	orientation: vertical;
 	expand: false;
 	children: [ inputbar, mode-switcher ];
 
 	background-color: @background;
-	padding: 0em 0.5em 0em 1em;
+	padding: 3em 2em 2em 1em;
+	background-image: url("/home/josiah/DesktopBackgrounds/PawelCzerwinskiRustyTide.jpg");
+
+	// border-radius: 7;
 }
 
 
 #inputbar {
 	expand: true;
 	children: [ textbox-prompt, entry ];
-	padding: 1em 0em 1em 0em;
+	//padding: 1em 0em 1em 0em;
+	padding: 1em;
+	border-radius: 7;
+	background-color: @background-t;
 }
 
 #textbox-prompt {
 	expand: false;
 	content: ">";
+	text-color: @foreground;
 	font: @font-lg;
 	padding: 0em 0.75em 0 0;
 }
 
 #entry {
 	font: @font-lg;
+	text-color: @foreground;
 	cursor: text;
 }
 
 #mode-switcher {
 	width: 10%;
+	margin: 1em 0 0 0;
 }
 
 #button {
 	font: @font-sm;
 
-	padding: 0.55em 0em 0.55em 0em;
-	margin: 0.45em 0 0.45em 0;
+	padding: 1em;
 	cursor: pointer;
 	horizontal-align: 0.5;
 	vertical-align: 0.5;
+	border-radius: 7;
+	expand: false;
+	text-color: @foreground;
 }
 
 #button selected {
-	text-color: @foreground;
-	background-color: @primary-bg;
+	background-color: @background-t;
 }
 
 /**
@@ -84,13 +99,16 @@
 
 #listview {
 	scrollbar: none;
-	background-color: @background-t;
+	background-color: @background;
 
-	reverse: true;
+	reverse: false;
 	fixed-height: false;
 	lines: 12;
 	dynamic: true;
-	spacing: 0;
+	spacing: 0.5em;
+	fixed-columns: true;
+
+	padding: 1em 0 1em 0;
 }
 
 #scrollbar {
@@ -104,18 +122,30 @@
 }
 
 #element {
-	padding: 1em 1em 1em 1em;
+	//margin: 0 5.5em 0em 1em;
+	margin: 0 2em;
 	cursor: pointer;
+	spacing: 1em;
+	// orientation: vertical;
 }
 
 #element-text {
-	vertical-align: 0.5;
+	padding: 1em 1em 1em 1em;
 	cursor: pointer;
+	vertical-align: 0.5;
+	text-color: @foreground;
+	font: @font-md;
+	border-radius: 7;
+	expand: true;
+}
+
+#element-text selected {
+	text-color: @primary;
+	background-color: @background-t;
 }
 
 #element selected {
-	text-color: @foreground;
-	background-color: @primary-bg;
+	text-color: @primary;
 }
 
 #element active {
@@ -127,6 +157,14 @@
 }
 
 #element-icon {
-	padding: 0 1em 0 0;
-	size: 1.5em;
+	padding: 0.5em;
+	size: 2.5em;
+	cursor: pointer;
+	// size: 4%;
+	vertical-align: 0.5;
+	border-radius: 7;
+}
+
+#element-icon selected {
+	background-color: @background-t;
 }

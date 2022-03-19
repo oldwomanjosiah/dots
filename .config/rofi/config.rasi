@@ -4,11 +4,11 @@
  * vim:ft=css
  */
 
+
 configuration {
 	modi: [drun, window, ssh];
 	show-icons: true;
 	terminal: "alacritty";
-	theme: "lower";
 	sidebar-mode: true;
 	matching: "fuzzy"; // Seems to fuck up searching for apps for some reason
 	sorting: "fzf"; // This seems to fix fuzzy matching
@@ -17,3 +17,5 @@ configuration {
 	window-match-fields: "class"; // title?
 	drun-match-fields: "name"; //
 }
+
+@theme "center"

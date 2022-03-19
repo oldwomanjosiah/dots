@@ -1,0 +1,37 @@
+/**
+ * Josiah Hilden
+ * vim:ft=css
+ */
+
+* {
+	trans:			#00000000;
+
+    pink:			#F795C2ff;
+	dblue:			#3E77C6ff;
+	lblue:			#6891D4ff;
+	black:			#080705ff;
+	offwhite:		#ECE0D9ff;
+
+    pink-t:			#F795C29f;
+	dblue-t:		#3E77C69f;
+	lblue-t:		#6891D49f;
+	black-t:		#0807059f;
+	offwhite-t:		#ECE0D99f;
+	//offwhite-t:		#ECE0D91f;
+	offwhite-tt:	#ECE0D91f;
+
+	foreground:		@black;
+	background:		@offwhite-t;
+	background-t:	@offwhite-tt;
+	
+	primary:		@pink;
+	primary-bg:		@pink-t;
+
+	secondary:		@pink;
+
+	alert:			@dblue;
+	alert-bg:		@background;
+
+	// Hide unset backgrounds
+	background-color: @trans;
+}
