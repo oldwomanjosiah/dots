@@ -9,6 +9,8 @@ vim.opt.termguicolors = true
 vim.g.home = os.getenv('HOME')
 vim.g.config_dir = vim.g.home .. '/.config/nvim/'
 
+vim.g.neovide_cursor_animation_length = 0.03
+
 require 'packer'.startup(function(use)
 	use 'sainnhe/edge'
 
@@ -92,7 +94,33 @@ local colorscheme = {
 	end)
 }
 
+local font = {
+	fira = {
+		name = 'Fira Code',
+		default_size = 'h10',
+	},
+	set = (function(to)
+		local name = to.name or to[0]
+		local default_size = to.default_size or to[1]
+
+		if not name then util.notify '`to` Must contain a font name' return end
+		if not default_size then util.notify '`to must contain a default size`' return end
+
+		if type(name) ~= 'string' then util.notify 'font name must be a string' end
+
+		if type(default_size) == 'string' then
+			-- TODO(josiah) add checking
+			vim.opt.guifont = name .. ':' .. default_size
+		elseif type(default_size) == 'number' then
+			vim.opt.guifont = name .. ':h' .. default_size
+		else
+			util.notify 'font size must be either a string ("h10") or number'
+		end
+	end)
+}
+
 colorscheme.set(colorscheme.edge)
+font.set(font.fira)
 
 
 
@@ -187,7 +215,7 @@ require 'oldwomanjosiah.project'.setup {}
 require 'oldwomanjosiah.nvim_dap'.setup {}
 require 'oldwomanjosiah.treesitter'.setup {}
 
-require 'oldwomanjosiah.bufferline'.setup {
+require 'bufferline'.setup {
 	options = {
 		right_mouse_command = '',
 		middle_mouse_command = 'Bdelete %d',
@@ -198,7 +226,7 @@ require 'oldwomanjosiah.bufferline'.setup {
 
 vim.notify = require 'notify'
 
-require 'oldwomanjosiah.nvim_tree':setup {}
+require 'oldwomanjosiah.nvim-tree':setup {}
 
 require 'oldwomanjosiah.mappings'.setup()
 
