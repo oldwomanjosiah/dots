@@ -20,24 +20,23 @@ M.servers = {
 }
 
 M.on_attach = function(client, bufnr)
-	local function lspcmd(name) return ('<cmd>lua vim.lsp.buf.' .. name .. '()<CR>') end
-	local function lspcmd_d(name) return ('<cmd>lua vim.lsp.diagnostic.' .. name .. '()<CR>') end
-	local function telescope(name) return ('<cmd>Telescope ' .. name .. '<CR>') end
-
-	-- option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+	local lspcmd = utils.cmd.lsp
+	local diag = utils.cmd.diag
+	local telescope = utils.cmd.telescope
 
 	-- Jump Commands
 	utils.nmap_buf(bufnr, 'gD', lspcmd('declaration'))
-	utils.nmap_buf(bufnr, 'gd', lspcmd('definition'))
+	utils.nmap_buf(bufnr, 'gd', telescope('lsp_definitions'))
 	utils.nmap_buf(bufnr, 'gi', lspcmd('implementation'))
 	utils.nmap_buf(bufnr, 'gr', telescope('lsp_references'))
+	utils.nmap_buf(bufnr, 'cs', telescope('lsp_workspace_symbols'))
 
 	-- Diagnostic Commands
 	utils.nmap_buf(bufnr, '<Leader>d', lspcmd('hover'))
 	utils.nmap_buf(bufnr, '<Leader>t', lspcmd('hover')) -- Old 'type' informati 
-	utils.nmap_buf(bufnr, '<Leader>e', lspcmd_d('show_line_diagnostics'))
-	utils.nmap_buf(bufnr, ']d', lspcmd_d('goto_next'))
-	utils.nmap_buf(bufnr, '[d', lspcmd_d('goto_prev'))
+	utils.nmap_buf(bufnr, '<Leader>e', diag('open_float'))
+	utils.nmap_buf(bufnr, ']d', diag('goto_next'))
+	utils.nmap_buf(bufnr, '[d', diag('goto_prev'))
 
 	-- Refactoring Commands
 	utils.nmap_buf(bufnr, '<Leader>rn', lspcmd('rename'))
@@ -78,6 +77,14 @@ function M.setup(opts)
 			capabilities = M.capabilities,
 			settings = {
 				expand_macro = true,
+				run_build_scripts = true,
+				load_out_dirs_from_check = true,
+				proc_macro = {
+					ignored = {
+						['async-trait'] = { 'async_trait' },
+						['tonic'] = { 'async_trait' }
+					}
+				}
 			},
 		},
 		--[[
@@ -103,9 +110,11 @@ function M.setup(opts)
 	crates.setup()
 
 	gitsigns.setup {
-		current_line_blame = true
+		current_line_blame = true,
 	}
 
 end
+
+M.setup {}
 
 return M

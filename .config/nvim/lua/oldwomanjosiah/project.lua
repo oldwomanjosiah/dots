@@ -6,7 +6,7 @@ local M = {}
 
 function M.setup(opts)
 	project.setup {}
-	util.command('Project', ':Telescope projects')
+	util.cmd.usr('Project', ':Telescope projects')
 	telescope.load_extension('projects')
 end
 
