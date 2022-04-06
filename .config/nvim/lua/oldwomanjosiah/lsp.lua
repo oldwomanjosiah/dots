@@ -27,7 +27,7 @@ M.on_attach = function(client, bufnr)
 	-- Jump Commands
 	utils.nmap_buf(bufnr, 'gD', lspcmd('declaration'))
 	utils.nmap_buf(bufnr, 'gd', telescope('lsp_definitions'))
-	utils.nmap_buf(bufnr, 'gi', lspcmd('implementation'))
+	utils.nmap_buf(bufnr, 'gi', telescope('lsp_implementations'))
 	utils.nmap_buf(bufnr, 'gr', telescope('lsp_references'))
 	utils.nmap_buf(bufnr, 'cs', telescope('lsp_workspace_symbols'))
 

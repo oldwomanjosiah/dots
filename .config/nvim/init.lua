@@ -1,6 +1,3 @@
--- TODO(josiah) remove
-package.loaded['oldwomanjosiah.util'] = nil
-
 -- Do work that needs to be picked up by plugins
 vim.g.mapleader = ' '
 
@@ -9,7 +6,19 @@ vim.opt.termguicolors = true
 vim.g.home = os.getenv('HOME')
 vim.g.config_dir = vim.g.home .. '/.config/nvim/'
 
-vim.g.neovide_cursor_animation_length = 0.03
+-- vim.g.neovide_cursor_animation_length = 0.03
+-- vim.g.neovide_cursor_vfx_mode = "torpedo"
+
+package.loaded['neovide'] = nil
+require 'neovide'.init {
+	cursor = {
+		animation_length = 0.03
+	},
+	particle = {
+		mode = require 'neovide'.particle.pixie_dust
+	}
+}
+
 
 require 'packer'.startup(function(use)
 	use 'sainnhe/edge'
@@ -41,7 +50,7 @@ require 'packer'.startup(function(use)
 	use 'saecki/crates.nvim'
 
 	-- GUI
-	use 'itchyny/lightline.vim'
+	use 'nvim-lualine/lualine.nvim'
 	use 'akinsho/bufferline.nvim'
 	use 'rcarriga/nvim-notify'
 	use 'moll/vim-bbye'
@@ -97,7 +106,7 @@ local colorscheme = {
 local font = {
 	fira = {
 		name = 'Fira Code',
-		default_size = 'h10',
+		default_size = 'h9',
 	},
 	set = (function(to)
 		local name = to.name or to[0]
@@ -121,8 +130,6 @@ local font = {
 
 colorscheme.set(colorscheme.edge)
 font.set(font.fira)
-
-
 
 --[[ Edge Colorscheme
 vim.opt.edge_diagnostic_virtual_text = 'colored'
@@ -167,6 +174,13 @@ util.nmap('N', 'Nzz')
 
 util.nmap('U', '<C-r>') -- Better Redo
 
+-- Common mistypes for exiting
+util.cmd.usr('W', ':w')
+util.cmd.usr('Wa', ':wa')
+util.cmd.usr('Wq', ':wq')
+util.cmd.usr('Q', ':q')
+util.cmd.usr('Qa', ':qa')
+
 -- Navigation Mappings
 util.nmap('<C-H>', '<C-W><C-H>')
 util.nmap('<C-J>', '<C-W><C-J>')
@@ -187,6 +201,7 @@ util.tmap('<C-J>', '<C-\\><C-N><C-W><C-J>')
 util.tmap('<C-K>', '<C-\\><C-N><C-W><C-K>')
 util.tmap('<C-L>', '<C-\\><C-N><C-W><C-L>')
 util.tmap('<Esc>', '<C-\\><C-N>')
+util.tmap('<C-T>', ':ToggleTerm<Cr>')
 
 vim.cmd [[
 augroup buffer_types clear
@@ -229,5 +244,7 @@ vim.notify = require 'notify'
 require 'oldwomanjosiah.nvim-tree':setup {}
 
 require 'oldwomanjosiah.mappings'.setup()
+package.loaded['oldwomanjosiah.lualine'] = nil
+require 'oldwomanjosiah.lualine':setup {}
 
 require 'tree-sitter-just'.setup {}
