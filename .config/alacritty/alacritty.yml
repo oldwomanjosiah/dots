@@ -15,20 +15,35 @@
 #         y: 0
 
 # CodeNewRoman ()
+# font:
+#     size: 9
+#     normal:
+#         family: CodeNewRoman Nerd Font Mono
+#         style: Book
+#     bold:
+#         family: CodeNewRoman Nerd Font Mono
+#         style: Bold
+#     italic:
+#         family: CodeNewRoman Nerd Font Mono
+#         style: Italic
+#     offset:
+#         x: 0
+#         y: 0
+
 font:
     size: 9
     normal:
-        family: CodeNewRoman Nerd Font Mono
-        style: Book
+        family: ComicCodeLigatures
+        style: Mono
     bold:
-        family: CodeNewRoman Nerd Font Mono
+        family: ComicCodeLigatures
         style: Bold
     italic:
-        family: CodeNewRoman Nerd Font Mono
+        family: ComicCodeLigatures
         style: Italic
     offset:
-        x: 1
-        y: 1
+        x: 0
+        y: 0
 
 ### Edge (Dark Neon variant)
 schemes:

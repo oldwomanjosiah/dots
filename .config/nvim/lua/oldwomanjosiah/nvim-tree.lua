@@ -14,13 +14,11 @@ function M.setup(self, opts)
 	nvim_tree.setup {
 		open_on_setup = false,
 		update_cwd = true,
-		auto_close = false,
 		diagnostics = {
 			enable = true,
 			show_on_dirs = true,
 		},
 		view = {
-			auto_resize = true,
 		}
 	}
 

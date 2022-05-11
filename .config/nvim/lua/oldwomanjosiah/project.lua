@@ -5,7 +5,11 @@ local telescope = require 'telescope'
 local M = {}
 
 function M.setup(opts)
-	project.setup {}
+	project.setup {
+		exclude_dirs = {
+			"~/.cargo/"
+		}
+	}
 	util.cmd.usr('Project', ':Telescope projects')
 	telescope.load_extension('projects')
 end

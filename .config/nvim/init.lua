@@ -1,8 +1,4 @@
--- Do work that needs to be picked up by plugins
 vim.g.mapleader = ' '
-
-vim.opt.encoding = 'utf-8'
-vim.opt.termguicolors = true
 vim.g.home = os.getenv('HOME')
 vim.g.config_dir = vim.g.home .. '/.config/nvim/'
 
@@ -108,6 +104,10 @@ local font = {
 		name = 'Fira Code',
 		default_size = 'h9',
 	},
+	comic = {
+		name = 'Comic Code Ligatures',
+		default_size = 'h9',
+	},
 	set = (function(to)
 		local name = to.name or to[0]
 		local default_size = to.default_size or to[1]
@@ -129,7 +129,7 @@ local font = {
 }
 
 colorscheme.set(colorscheme.edge)
-font.set(font.fira)
+font.set(font.comic)
 
 --[[ Edge Colorscheme
 vim.opt.edge_diagnostic_virtual_text = 'colored'
