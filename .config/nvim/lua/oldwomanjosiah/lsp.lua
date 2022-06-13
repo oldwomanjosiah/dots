@@ -24,6 +24,8 @@ M.on_attach = function(client, bufnr)
 	local diag = utils.cmd.diag
 	local telescope = utils.cmd.telescope
 
+	print(vim.inspect(vim.lsp.codelens.get(bufnr)))
+
 	-- Jump Commands
 	utils.nmap_buf(bufnr, 'gD', lspcmd('declaration'))
 	utils.nmap_buf(bufnr, 'gd', telescope('lsp_definitions'))

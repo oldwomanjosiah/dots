@@ -110,7 +110,48 @@ function cmd.telescope(name, for_map)
 	end
 end
 
+local fn = {}
+--- Map the contents of a table using f
+function map(tbl, f)
+	local out = {}
+
+	for key, value in pairs(tbl or {}) do
+		out[key] = f(value)
+	end
+
+	return out
+end
+
+fn.map = map
+
+local rtp = {}
+
+--- Get the current runtimepath as a comma separated string
+function rtp.current_str()
+	return vim.opt.rtp._value
+end
+
+--- Get the current runtimepath as a table of globbed paths
+function rtp.current()
+	return vim.split(rtp.current_str(), ',')
+end
+
+--- Find files matching a relative path with globbing in
+--- the runtimepath
+---
+--- @see vim.fn.globpath
+function rtp.find(globbed)
+	return vim.split(vim.fn.globpath(rtp.current_str(), globbed), '\n')
+end
+
+function M.rerequire(module)
+	package.loaded[module] = nil
+	return require(module)
+end
+
 --- Creating and defining Ex Mode Commands
 M.cmd = cmd
+M.rtp = rtp
+M.fn = fn
 
 return M

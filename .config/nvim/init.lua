@@ -1,11 +1,12 @@
 vim.g.mapleader = ' '
 vim.g.home = os.getenv('HOME')
 vim.g.config_dir = vim.g.home .. '/.config/nvim/'
+vim.opt.termguicolors = true
+
 
 -- vim.g.neovide_cursor_animation_length = 0.03
 -- vim.g.neovide_cursor_vfx_mode = "torpedo"
 
-package.loaded['neovide'] = nil
 require 'neovide'.init {
 	cursor = {
 		animation_length = 0.03
@@ -47,7 +48,10 @@ require 'packer'.startup(function(use)
 
 	-- GUI
 	use 'nvim-lualine/lualine.nvim'
-	use 'akinsho/bufferline.nvim'
+	use {
+		'akinsho/bufferline.nvim',
+		tag = 'v1.*',
+	}
 	use 'rcarriga/nvim-notify'
 	use 'moll/vim-bbye'
 
@@ -56,7 +60,10 @@ require 'packer'.startup(function(use)
 
 	use 'ryanoasis/vim-devicons'
 
-	use 'akinsho/toggleterm.nvim'
+	use {
+		'akinsho/toggleterm.nvim',
+		tag = 'v1.*',
+	}
 	use 'tpope/vim-surround'
 
 	use { 'cespare/vim-toml', }
@@ -68,14 +75,16 @@ require 'packer'.startup(function(use)
 	use 'oldwomanjosiah/sasylf.vim'
 	use 'dingdean/wgsl.vim'
 	use 'elkowar/yuck.vim'
+	use 'qnighy/lalrpop.vim'
 	use 'tpope/vim-markdown'
 	use 'NoahTheDuke/vim-just'
 	use 'IndianBoy42/tree-sitter-just'
 end)
 
+package.loaded['oldwomanjosiah.util'] = nil
 local util = require 'oldwomanjosiah.util'
 
-local colorscheme = {
+local colorscheme = util.rerequire 'oldwomanjosiah.util.colorscheme':setup {
 	edge = {
 		name = 'edge',
 		before = (function()
@@ -83,21 +92,26 @@ local colorscheme = {
 			vim.g.edge_style = 'default'
 			vim.g.edge_transparent_background = 0
 		end)
-	},
-	set = (function(to)
-		local name = to.name or to[0]
-		local before = to.before or to[1]
-
-		if name == nil then
-			util.notify 'The name field is required for colorcheme.set'
-			return
-		end
-
-		if before ~= nil then before() end
-
-		vim.cmd('colorscheme ' .. name)
-	end)
+	}
 }
+
+-- local iters = util.rerequire 'oldwomanjosiah.util.iters'
+-- 
+-- local new = iters
+-- 	.iter_from { 'one', 'two', 'three' }
+-- 	:map(
+-- 		function (it)
+-- 			return 'prefixed: ' .. it
+-- 		end
+-- 	)
+-- 	:map(
+-- 		function(it)
+-- 			return it .. ', World!'
+-- 		end
+-- 	)
+-- 	:collect()
+-- 
+-- print(vim.inspect(new))
 
 local font = {
 	fira = {
@@ -128,7 +142,7 @@ local font = {
 	end)
 }
 
-colorscheme.set(colorscheme.edge)
+colorscheme.set(colorscheme.named.edge)
 font.set(font.comic)
 
 --[[ Edge Colorscheme
@@ -244,7 +258,6 @@ vim.notify = require 'notify'
 require 'oldwomanjosiah.nvim-tree':setup {}
 
 require 'oldwomanjosiah.mappings'.setup()
-package.loaded['oldwomanjosiah.lualine'] = nil
 require 'oldwomanjosiah.lualine':setup {}
 
 require 'tree-sitter-just'.setup {}
