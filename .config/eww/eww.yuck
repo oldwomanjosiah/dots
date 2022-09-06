@@ -1,0 +1,93 @@
+(include "./system/eww.yuck")
+
+(defwindow main
+  :monitor 0
+  :geometry (geometry
+    :x "0px"
+    :y "0px"
+    :width "100%"
+    :height "60px"
+    :anchor "top center")
+  :stacking "bg"
+  :wm-ignore true
+  :reserve (struts :distance "45px" :side "left")
+  :windowtype "toolbar"
+  (spotify))
+
+(defwindow widgets
+  :monitor 0
+  :geometry (geometry
+              :x "-15px"
+              :y "45px"
+              :anchor "top right")
+  :windowtype "toolbar"
+  :wm-ignore true
+  :stacking "bg"
+  (spotify))
+
+(deflisten spotify_data `playerctl_spot`)
+
+(defwidget spotify [] (box
+  :class "bounding"
+  :orientation "v"
+  :space-evenly false
+  :spacing 0
+  (box :orientation "h" (box
+      :class "musicArt"
+      :halign "center"
+      :style "background-image: url('${spotify_data.art}');"))
+  (label :text {spotify_data.title})
+  (label :text {spotify_data.artist})))
+
+(deflisten active_workspaces `./scripts/workspaces watch`)
+
+(defwidget workspaceIndicator [num monitor]
+  (box :orientation "v"
+    (button
+      :class "indicator ${active_workspaces["${num}"]["dis"] == monitor ? "focused" : "" } ${active_workspaces["${num}"].dis < 0 ? "" : "visible" } ${active_workspaces["${num}"].ex ? "exists" : ""}"
+      :onclick "scripts/workspaces set ${num}"
+      (box :orientation "v"
+        (box :orientation "h"
+          (box :class "inner"))))))
+
+(defwidget workspaces [monitor]
+  (box
+    :orientation "h"
+    :hexpand "false"
+    :vexpand "false"
+    (box
+      :orientation "h"
+      :space-evenly false
+      :class "workspaces-bar"
+      :hexpand false
+      :vexpand false
+      :halign "center"
+      :spacing 10
+      (workspaceIndicator :num 1 :monitor monitor)
+      (workspaceIndicator :num 2 :monitor monitor)
+      (workspaceIndicator :num 3 :monitor monitor)
+      (workspaceIndicator :num 4 :monitor monitor)
+      (workspaceIndicator :num 5 :monitor monitor)
+      (workspaceIndicator :num 6 :monitor monitor)
+      (workspaceIndicator :num 7 :monitor monitor)
+      (workspaceIndicator :num 8 :monitor monitor)
+      (workspaceIndicator :num 9 :monitor monitor)
+      (workspaceIndicator :num 10 :monitor monitor))))
+
+(defwindow bar-left
+  :monitor 0
+  :reserve (struts :distance "45px" :side "bottom")
+  :geometry (geometry :anchor "bottom center")
+  :hexpand "false"
+  :vexpand "false"
+  :stacking "fg"
+  (box :orientation "v" :class "wrap-bottom" (workspaces :monitor 0)))
+
+(defwindow bar-right
+  :monitor 1
+  :reserve (struts :distance "45px" :side "bottom")
+  :geometry (geometry :anchor "bottom center")
+  :hexpand "false"
+  :vexpand "false"
+  :stacking "fg"
+  (box :orientation "v" :class "wrap-bottom" (workspaces :monitor 1)))

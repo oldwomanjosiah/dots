@@ -1,0 +1,87 @@
+$primary:		#d38aea;
+$secondary:		#a0c980;
+$onPrimary:		#2c2e34;
+$onSecondary:	#2c2e34;
+$surface:		#2c2e34;
+$onSurface:		#c5cdd9;
+$transparent:	rgba(0, 0, 0, 0);
+
+$bodyMargin:		0.6rem;
+$cornerRadiusLarge:	1.2rem;
+
+* { all: unset; }
+
+.background, .bar {
+	// margin: 0.5rem;
+}
+
+.bounding {
+	background-color: $surface;
+	padding: $bodyMargin;
+	border-radius: $cornerRadiusLarge;
+}
+
+.musicArt {
+	min-height: 260px;
+	min-width: 260px;
+	background-size: 260px;
+}
+
+// Workspace Indicators styling
+.workspaces-bar {
+	background-color: $surface;
+	padding: $bodyMargin;
+	border-radius: $cornerRadiusLarge;
+
+
+	.indicator {
+		min-width: 16px;
+		min-height: 16px;
+		border-radius: 10px;
+		border: dashed 2px $onSurface;
+		opacity: 0.5;
+		transition: opacity 0.4s;
+
+		&:hover {
+			opacity: 1;
+		}
+
+		.inner {
+			opacity: 0;
+			margin: 4px;
+			border-radius: 50%;
+			border: dashed 2px $onSurface;
+			transition: opacity 0.4s;
+		}
+
+		&.visible:not(.focused) .inner {
+			opacity: 1;
+		}
+
+		&.focused {
+			background-color: $onSurface;
+		}
+
+		&.urgent {
+			border-color: $primary;
+
+			&.visible .inner {
+				border-color: $primary;
+			}
+		}
+
+		&.exists {
+			opacity: 1;
+			border-style: solid;
+			transition: background-color 0.4s;
+
+			&:hover {
+				background-color: $onSurface;
+			}
+		}
+	}
+}
+
+.wrap-bottom {
+	margin-bottom: 15px;
+}

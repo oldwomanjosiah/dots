@@ -1,0 +1,101 @@
+#/bin/bash
+# vim:ft=bash
+
+jq_desc='
+def build_default(count):
+	reduce 
+		(range(1; count + 1) | { "\(.)": { vis: false, foc: false, ex: false, urg: false, cl: "" } }) as $item
+	({}; . * $item);
+
+def class(cond; class): if cond then class else null end;
+
+def fill_classes:
+	.cl = ([class(.vis; "visible"), class(.foc; "focused"), class(.ex; "exists"), class(.urg; "urgent")] | join(" "));
+
+def convert_inputs:
+	reduce
+	(.[] | { "\(.num)": ({ vis: .visible, foc: .focused, urg: .urgent, ex: true } | fill_classes) }) as $item
+	({}; . * $item);
+
+build_default(10) + convert_inputs
+'
+
+jq_desc_two='
+def build_default(count):
+	reduce 
+		(range(1; count + 1) | { "\(.)": { dis: -1, ex: false, urg: false, cl: "" } }) as $item
+	({}; . * $item);
+
+def class(cond; class): if cond then class else null end;
+
+def fill_classes:
+	.cl = ([class(.vis; "visible"), class(.foc; "focused"), class(.ex; "exists"), class(.urg; "urgent")] | join(" "));
+
+def convert_inputs:
+	.displays as $displays | .workspaces |
+	reduce (
+		.[] | {
+			"\(.num)": ({
+					dis: (if .visible then (.output as $out | $displays | index($out)) else -1 end),
+					urg: .urgent,
+					ex: true
+				}) }) as $item
+	({}; . * $item);
+
+build_default(10) + convert_inputs
+'
+
+ActiveWorspaces() {
+	i3-msg -t get_workspaces |\
+		# jq -c '.[] | { (["w", .num] | join("-")): { vis: .visible, foc: .focused } }'
+		# jq -c '.[] | { num: .num, vis: .vis, foc: .focused } | join({}, { vis: .vis, foc: .foc }, "\(.num)")'
+		jq -c "$jq_desc"
+}
+
+WorkspacesIndexed() {
+	displays=$(xrandr | grep -w connected | awk '{ printf("\"%s\"\n", $1) }' | jq -s)
+	workspaces=$(i3-msg -t get_workspaces)
+
+	echo "{ \"displays\": $displays, \"workspaces\": $workspaces }" | jq -c "$jq_desc_two"
+}
+
+WatchWorkspaces() {
+	# Subscribe to the workspace changed event, so we know to re-query
+	WorkspacesIndexed
+	i3-msg -t subscribe -m '[ "workspace" ]' |\
+		while read line; do
+			WorkspacesIndexed
+		done
+}
+
+SwitchWorkspace() {
+	i3-msg workspace $1
+}
+
+case "$1" in
+	get)
+		WorkspacesIndexed
+		;;
+
+	watch)
+		WatchWorkspaces
+		;;
+
+	set)
+		SwitchWorkspace $2
+		;;
+
+	test)
+		ActiveWorspacesByNumber
+		;;
+
+	*)
+		echo "Usage:"
+		echo "  workspaces <subcommand>"
+		echo
+		echo "Subcommands:"
+		echo "  - get		Print a json array of the active workspaces"
+		echo "  - watch		Subscribe to workspace changed events"
+		echo "  - set <ws>	Switch to a workspace"
+		;;
+esac
