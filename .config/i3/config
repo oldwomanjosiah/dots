@@ -11,6 +11,8 @@
 
 set $mod Mod4
 set $terminal alacritty
+set $browser google-chrome-stable
+set $fileman thunar
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -34,36 +36,37 @@ bindsym $mod+Control+l exec light-locker-command -l
 
 # Use pactl to adjust volume in PulseAudio.
 # set $refresh_i3status killall -SIGUSR1 i3status
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_i3status
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
 # Media player controls (Mac keyboard uses pause for both)
 bindsym XF86AudioPause exec "playerctl --player=spotify,chromum play-pause"
-bindsym XF86AudioNext exec playerctl next
-bindsym XF86AudioPrev exec playerctl previous
+bindsym XF86AudioNext exec "playerctl --player=spotify,chromum next"
+bindsym XF86AudioPrev exec "playerctl --player=spotify,chromum previous"
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
 # start a terminal
 bindsym $mod+Return exec $terminal
+bindsym $mod+Shift+Return exec $browser
+bindsym $mod+Shift+f exec $fileman
 
 # Open i3-notification
 # bindsym $mod+n exec dbus-send --session --print-reply --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.Notifications.ShowNotifications
 
+bindsym $mod+Shift+n exec dunstctl history-pop
+bindsyn $mod+n exec dunstctl context
+
 # Select and take a screenshot
 
-set $scrot_path '/home/josiah/screenshot/%Y-%m-%d_%H:%M:%S_selection.png'
-set $scrot_copy 'xclip -selection c -t image/png < $f'
-set $scrot_prefix $Mod+Control
+bindsym --release $mod+Control+s exec ~/.config/screenshot.sh select
+bindsym --release $mod+Control+4 exec ~/.config/screenshot.sh select
 
-bindsym --release $mod+Control+s exec scrot $scrot_path -s -e $scrot_copy
-bindsym --release $mod+Control+4 exec scrot $scrot_path -s -e $scrot_copy
-
-bindsym --release $mod+Control+a exec scrot $scrot_path -e $scrot_copy
-bindsym --release $mod+Control+3 exec scrot $scrot_path -e $scrot_copy
+bindsym --release $mod+Control+a exec ~/.config/screenshot.sh
+bindsym --release $mod+Control+3 exec ~/.config/screenshot.sh
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -153,6 +156,9 @@ bindsym $mod+Left workspace prev
 bindsym $mod+Down workspace next
 bindsym $mod+Right workspace next
 
+bindsym $mod+Control+Left move workspace to output left
+bindsym $mod+Control+Right move workspace to output right
+
 # Move to the next and prev workspaces
 bindsym $mod+Shift+Up move container to workspace prev
 bindsym $mod+Shift+Left move container to workspace prev
@@ -218,10 +224,14 @@ exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 # to get the window class run xprop and click on the window
 assign [class="Todost"] $ws1
 assign [class="Brave-browser"] $ws2
-for_window [class="Spotify"] move to workspace $ws10
+assign [class="Spotify"] $ws10
 assign [class="Steam"] $ws8
 assign [class="discord"] $ws9
-for_window [class="Microsoft Teams - Preview"] move to workspace $ws9
+assign [class="Microsoft Teams - Preview"] $ws9
+assign [class="Slack"] $ws9
+
+for_window [class="Microsoft Teams - Preview" title="Notification"] floating enable
+for_window [workspace=8] floating enable
 
 # Start stalonekey on startup, then hide it until its called up again
 # exec --no-startup-id /home/oldwomanjosiah/.config/stalonetray/start.sh
@@ -253,11 +263,25 @@ mode "$mode_redshift" {
     bindsym Escape mode "default"
 }
 
+set $mode_zoom Zoomed
+set $video_prefix v4l2-ctl -d /dev/video2
 
+mode "$mode_zoom" {
+	bindsym Escape exec "$video_prefix --set-ctrl=zoom_absolute=100"; mode default
+	bindsym $mod+Shift+z exec "$video_prefix --set-ctrl=zoom_absolute=100"; mode default
+}
 
-for_window [class="^.*"] border pixel 0
+bindsym $mod+Shift+z exec "v4l2-ctl -d /dev/video2 --set-ctrl=zoom_absolute=300"; mode $mode_zoom
+
+for_window [class="^.*"] border pixel 1
 gaps inner 15
+for_window [class="eww-sys-controls"] border pixel 0
 # smart_gaps inverse_outer
 
 focus_follows_mouse no
 workspace_auto_back_and_forth yes
+
+#                       border  back    text    indic   child border
+client.focused          #d38aea #000000 #ffffff #d38aea #d38aea
+client.unfocused        #2b2d37 #000000 #ffffff #2b2d37 #2b2d37
+client.focused_inactive #2b2d37 #000000 #ffffff #2b2d37 #2b2d37

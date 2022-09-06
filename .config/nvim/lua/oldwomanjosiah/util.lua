@@ -149,6 +149,33 @@ function M.rerequire(module)
 	return require(module)
 end
 
+--- Turn a list like table into a string
+function M.jointostr(tbl, separator)
+	local function skip(itf, t, s)
+		local iterator, _, k = itf(t)
+
+		for _ = 1,s do
+			k = iterator(t, k)
+		end
+
+		return iterator, tbl, k
+	end
+
+	local sep = separator or ' '
+	local str = ''
+
+	for _,v in ipairs(tbl) do
+		str = str .. v
+		break
+	end
+
+	for _,v in skip(ipairs, tbl, 1) do
+		str = str .. sep .. v
+	end
+
+	return str
+end
+
 --- Creating and defining Ex Mode Commands
 M.cmd = cmd
 M.rtp = rtp

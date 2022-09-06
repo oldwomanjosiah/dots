@@ -4,9 +4,6 @@ vim.g.config_dir = vim.g.home .. '/.config/nvim/'
 vim.opt.termguicolors = true
 
 
--- vim.g.neovide_cursor_animation_length = 0.03
--- vim.g.neovide_cursor_vfx_mode = "torpedo"
-
 require 'neovide'.init {
 	cursor = {
 		animation_length = 0.03
@@ -18,6 +15,7 @@ require 'neovide'.init {
 
 
 require 'packer'.startup(function(use)
+	use 'wbthomason/packer.nvim'
 	use 'sainnhe/edge'
 
 	use 'nvim-lua/popup.nvim'
@@ -54,6 +52,8 @@ require 'packer'.startup(function(use)
 	}
 	use 'rcarriga/nvim-notify'
 	use 'moll/vim-bbye'
+	use 'hood/popui.nvim'
+	use 'RishabhRD/popfix'
 
 	use 'kyazdani42/nvim-web-devicons'
 	use 'kyazdani42/nvim-tree.lua'
@@ -79,17 +79,21 @@ require 'packer'.startup(function(use)
 	use 'tpope/vim-markdown'
 	use 'NoahTheDuke/vim-just'
 	use 'IndianBoy42/tree-sitter-just'
+	use {
+		'kevinhwang91/nvim-ufo',
+		requires = 'kevinhwang91/promise-async'
+	}
 end)
 
 package.loaded['oldwomanjosiah.util'] = nil
 local util = require 'oldwomanjosiah.util'
 
-local colorscheme = util.rerequire 'oldwomanjosiah.util.colorscheme':setup {
+local colorscheme = require 'oldwomanjosiah.util.colorscheme':setup {
 	edge = {
 		name = 'edge',
 		before = (function()
 			vim.g.edge_diagnostic_virtual_text = 'colored'
-			vim.g.edge_style = 'default'
+			vim.g.edge_style = 'neon'
 			vim.g.edge_transparent_background = 0
 		end)
 	}
@@ -177,6 +181,10 @@ vim.opt.wildmode = 'list:longest'
 vim.opt.undodir = vim.g.config_dir .. 'nvimdid'
 vim.opt.undofile = true
 
+vim.wo.foldcolumn = '1'
+vim.wo.foldlevel = 99 -- feel free to decrease the value
+vim.wo.foldenable = true
+
 -- Common mappings
 vim.opt.mouse = 'a'
 
@@ -217,27 +225,85 @@ util.tmap('<C-L>', '<C-\\><C-N><C-W><C-L>')
 util.tmap('<Esc>', '<C-\\><C-N>')
 util.tmap('<C-T>', ':ToggleTerm<Cr>')
 
-vim.cmd [[
-augroup buffer_types clear
-	au BufNewFile,BufRead *.tex,*.md setlocal textwidth=80 spell spelllang=en_us
-	au BufNewFile,BufRead *.md setlocal linebreak ts=2 sw=2 expandtab
-augroup END
-]]
+local fextopts = {
+	['tex'] = {
+		textwidth = 80,
+		spell = true,
+		spelllang = 'en_us'
+	},
+	['md'] = {
+		textwidth = 80,
+		spell = true,
+		spelllang = 'en_us',
+		linebreak = true,
+		softtabstop = 2,
+		tabstop = 2,
+		shiftwidth = 2,
+		expandtab = true
+	}
+}
+
+local function setup_filetypes(opts)
+	-- Build a single opt from a key + value
+	local function makeopt(opt, value)
+		local valty = type(value)
+
+		if valty == 'boolean' then
+			if value then
+				return opt
+			else
+				return ('no' .. opt)
+			end
+		elseif valty == 'string' or valty == 'number' then
+			return (opt .. '=' .. value)
+		else
+			error('cannot have opt of type ' .. valty .. ' for ' .. opt)
+		end
+	end
+
+	local lines = {}
+	for ft, ftopts in pairs(opts or {}) do
+		local ftstr = '*.' .. ft
+		local o = {}
+
+		for k,v in pairs(ftopts or {}) do
+			table.insert(o, makeopt(k, v))
+		end
+
+		table.insert(lines, 'au BufNewFile,BufRead ' .. ftstr .. ' setlocal ' .. util.jointostr(o))
+	end
+
+	vim.cmd('augroup setup_filetypes clear\n' .. util.jointostr(lines, '\n') .. '\naugroup end')
+end
+
+setup_filetypes(fextopts)
 
 vim.cmd [[
 hi def link LspDiagnosticsDefaultError Error
 hi def link LspDiagnosticsDefaultWarning Debug
 hi def link LspDiagnosticsDefaultInformation Todo
 hi def link LspDiagnosticsDefaultHint Todo
+
+" For UFO
+hi default link UfoFoldedEllipsis Comment
 ]]
+
+vim.ui.select = require 'popui.ui-overrider'
+vim.ui.input = require 'popui.input-overrider'
 
 require 'fidget'.setup {}
 
 local cmp_out = require 'oldwomanjosiah.cmp'.setup {}
 
 require 'oldwomanjosiah.lsp'.setup {
-	capabilities = cmp_out.capabilities
+	capabilities = cmp_out.capabilities,
+	after = function()
+		require 'ufo'.setup {}
+		vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
+		vim.o.foldcolumn = '1'
+	end
 }
+
 require 'oldwomanjosiah.telescope':setup {}
 require 'oldwomanjosiah.toggleterm'.setup {}
 require 'oldwomanjosiah.project'.setup {}

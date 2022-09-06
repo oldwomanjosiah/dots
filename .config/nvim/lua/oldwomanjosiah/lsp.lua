@@ -24,8 +24,6 @@ M.on_attach = function(client, bufnr)
 	local diag = utils.cmd.diag
 	local telescope = utils.cmd.telescope
 
-	print(vim.inspect(vim.lsp.codelens.get(bufnr)))
-
 	-- Jump Commands
 	utils.nmap_buf(bufnr, 'gD', lspcmd('declaration'))
 	utils.nmap_buf(bufnr, 'gd', telescope('lsp_definitions'))
@@ -57,10 +55,23 @@ end
 -- Setup lsp, allows for overriding capabilities in opts
 function M.setup(opts)
 
+	M.capabilities = vim.lsp.protocol.make_client_capabilities()
+
+	local folding = {
+		textDocument = {
+			foldingRange = {
+				dynamicRegistration = false,
+				lineFoldingOnly = true
+			}
+		}
+	}
+
+	M.capabilities = vim.tbl_deep_extend('force', M.capabilities, opts.capabilities or {}, folding)
+
 	for _, server in ipairs(M.servers) do
 		lspconfig[server.name].setup {
 			on_attach = M.on_attach,
-			capabilities = opts.capabilities,
+			capabilities = M.capabilities,
 			settings = server.settings or opts.default_settings or {},
 		}
 	end
@@ -74,6 +85,29 @@ function M.setup(opts)
 	)
 
 	rust_tools.setup {
+		tools = {
+			right_align = true,
+			executor = {
+				execute_command = function(command, args, cwd)
+					local term = require 'toggleterm.terminal'
+					local toggleterm = require 'oldwomanjosiah.toggleterm'
+
+					local rust_command = require 'rust-tools.utils.utils'.make_command_from_args(command, args)
+
+					print(vim.inspect(rust_command))
+
+					local terminal, new = term.get_or_create_term(1, cwd, toggleterm.default_direction)
+
+					if new or not terminal:is_open() then
+						local size = require 'oldwomanjosiah.toggleterm'.sizes.hori(vim.o.lines)
+
+						terminal:open(size, toggleterm.default_direction, new)
+					end
+
+					terminal:send(rust_command, true)
+				end,
+			}
+		},
 		server = {
 			on_attach = M.on_attach,
 			capabilities = M.capabilities,
@@ -115,8 +149,7 @@ function M.setup(opts)
 		current_line_blame = true,
 	}
 
+	if opts.after then opts.after() end
 end
-
-M.setup {}
 
 return M

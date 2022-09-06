@@ -106,14 +106,16 @@
 	inherit = bar/base
 
 	#modules-left = spacer-primary time date spacer track-prev track-playpause track-next
-	modules-left = spacer i3 spacer i3-mode
+	#modules-left = spacer i3 spacer i3-mode
+	modules-left = spacer i3-mode
 	modules-center = time
 	modules-right = date spacer
 
 [bar/right]
 	inherit = bar/base
 
-	modules-left = spacer i3 spacer i3-mode
+	#modules-left = spacer i3 spacer i3-mode
+	modules-left = spacer i3-mode
 	modules-center = time
 	modules-right = wifi spacer volume spacer
 

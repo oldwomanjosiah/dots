@@ -54,6 +54,7 @@ function M.setup(self, opts)
 	self.theme = (opts or {}).theme or (themes.get_dropdown {})
 
 	telescope.setup {}
+
 end
 
 return M

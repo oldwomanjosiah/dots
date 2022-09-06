@@ -3,6 +3,7 @@
 # Josiah Hilden (2021)
 # lightdm xinit
 
+/home/josiah/.screenlayout/default.sh
 picom --backend glx &
 nitrogen --restore &
 stalonetray &
@@ -12,5 +13,8 @@ numlockx &
 light-locker &
 eval $(ssh-agent)
 ssh-add $HOME/.ssh/id_rsa
+$HOME/.config/eww/start.sh &
+thunar --daemon &
 $HOME/.config/stalonetray/unmap.sh
-export JAVA_HOME=/home/josiah/.local/share/AndroidStudio2021/jre/
+export JAVA_HOME=/home/josiah/.local/share/AndroidStudio2022.1/jre/
+gsettings set org.gnome.desktop.interface color-scheme prefer-dark
