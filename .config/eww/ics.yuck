@@ -13,7 +13,7 @@
     :valign { valign ?: "center" }
     :style {
       let
-        ic-bg = ics[name]?.css,
+        ic-bg = ics == "" ? "color: white;" : ics[name]?.css,
         base-css = ic-bg ?: "background-color: red;",
         color = color ?: "white"
       in

@@ -1,9 +1,9 @@
-$primary:		#d38aea;
-$secondary:		#a0c980;
-$onPrimary:		#2c2e34;
-$onSecondary:	#2c2e34;
-$surface:		#2c2e34;
-$onSurface:		#c5cdd9;
+$primary:		rgba(#d38aea, 1.0);
+$secondary:		rgba(#a0c980, 1.0);
+$onPrimary:		rgba(#2c2e34, 1.0);
+$onSecondary:	rgba(#2c2e34, 1.0);
+$surface:		rgba(#2c2e34, 1.0);
+$onSurface:		rgba(#c5cdd9, 1.0);
 $transparent:	rgba(0, 0, 0, 0);
 
 $gapSize:			15px;
@@ -12,11 +12,11 @@ $cornerRadiusLarge:	1.2rem;
 
 // @define-color Primary #d38aea;
 
-* { all: unset; }
-
-.background, .bar {
-	// margin: 0.5rem;
+@function surface($amount) {
+	@return transparentize($surface, $amount);
 }
+
+* { all: unset; }
 
 .bounding {
 	background-color: $surface;
@@ -31,15 +31,15 @@ $cornerRadiusLarge:	1.2rem;
 }
 
 .bubble {
-	background-color: $surface;
+	background-color: surface(0);
 	padding: $bodyMargin;
 	border-radius: $cornerRadiusLarge;
 
-	&.d1 { background-color: alpha($surface, 0.9); }
-	&.d2 { background-color: alpha($surface, 0.8); }
-	&.d3 { background-color: alpha($surface, 0.7); }
-	&.d4 { background-color: alpha($surface, 0.6); }
-	&.d5 { background-color: alpha($surface, 0.5); }
+	&.d1 { background-color: surface(0.2); }
+	&.d2 { background-color: surface(0.4); }
+	&.d3 { background-color: surface(0.5); }
+	&.d4 { background-color: surface(0.6); }
+	&.d5 { background-color: surface(0.5); }
 
 	.bin {
 		padding-left: $bodyMargin;
@@ -56,14 +56,6 @@ $cornerRadiusLarge:	1.2rem;
 	.white {
 		//fill: white;
 	}
-}
-
-.volimg {
-	color: $primary;
-	background-repeat: no-repeat;
-	background-image:
-	image(-gtk-recolor(url("/home/josiah/.local/share/ic-cache/faf-6.2/svgs/solid/volume-high.symbolic.png")))
-	;
 }
 
 // Workspace Indicators styling

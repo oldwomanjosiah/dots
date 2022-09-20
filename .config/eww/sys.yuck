@@ -34,7 +34,7 @@
 (defwidget volume [?distance]
   (bubble
     :spacing 8
-    :tooltip { sys?.sound?.muted ? "Mute" : "${sys?.sound?.volume}%" }
+    :tooltip { (sys?.sound?.muted == true) ? "Mute" : "${sys?.sound?.volume}%" }
     :distance { distance }
     (button
       :onclick `pactl set-sink-mute @DEFAULT_SINK@ toggle`
@@ -63,7 +63,7 @@
       }
       :width 16
       :height 16
-      :value { sys.sound.volume ?: 0.0 }
+      :value { sys?.sound?.volume ?: 0.0 }
       :start-at 0
       :thickness 2
       :clockwise true)))
