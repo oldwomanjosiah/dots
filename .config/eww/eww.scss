@@ -6,8 +6,11 @@ $surface:		#2c2e34;
 $onSurface:		#c5cdd9;
 $transparent:	rgba(0, 0, 0, 0);
 
+$gapSize:			15px;
 $bodyMargin:		0.6rem;
 $cornerRadiusLarge:	1.2rem;
+
+// @define-color Primary #d38aea;
 
 * { all: unset; }
 
@@ -27,12 +30,44 @@ $cornerRadiusLarge:	1.2rem;
 	background-size: 260px;
 }
 
-// Workspace Indicators styling
-.workspaces-bar {
+.bubble {
 	background-color: $surface;
 	padding: $bodyMargin;
 	border-radius: $cornerRadiusLarge;
 
+	&.d1 { background-color: alpha($surface, 0.9); }
+	&.d2 { background-color: alpha($surface, 0.8); }
+	&.d3 { background-color: alpha($surface, 0.7); }
+	&.d4 { background-color: alpha($surface, 0.6); }
+	&.d5 { background-color: alpha($surface, 0.5); }
+
+	.bin {
+		padding-left: $bodyMargin;
+		padding-right: $bodyMargin;
+	}
+}
+
+.side {
+	margin-left: $gapSize;
+	margin-right: $gapSize;
+}
+
+.fa-icon {
+	.white {
+		//fill: white;
+	}
+}
+
+.volimg {
+	color: $primary;
+	background-repeat: no-repeat;
+	background-image:
+	image(-gtk-recolor(url("/home/josiah/.local/share/ic-cache/faf-6.2/svgs/solid/volume-high.symbolic.png")))
+	;
+}
+
+// Workspace Indicators styling
+.workspaces-bar {
 
 	.indicator {
 		min-width: 16px;

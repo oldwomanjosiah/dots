@@ -1,0 +1,167 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+base_dir=/home/josiah/.local/share/icons/
+cache_dir=/home/josiah/.local/share/ic-cache/
+
+function svg_name() {
+	fd "^$2\.svg" "$base_dir$1" | head -n 1
+}
+
+function esp() {
+	sed -E 's/\//\\\//g'
+}
+
+function uesp() {
+	sed -E 's/\//\\\//g'
+}
+
+function log() {
+	cat <<< "$@" >> /dev/stderr
+}
+
+function extract() {
+	local it
+
+	while read it; do
+		local dir=$(dirname "$it")
+		local ic=$(basename "$it" | sed -E 's/\.svg//g')
+		echo $dir:$ic
+	done
+}
+
+function std() {
+	local tostrip=$(esp <<< "$1")
+	sed -E "s/$tostrip//g"
+}
+
+function cacheloc() {
+	basename=$(
+		std "$base_dir" |\
+			extract |\
+			sed -E 's/:.*//g')
+
+	echo $cache_dir$basename/
+	
+}
+
+function get() {
+	name=$(svg_name "$1" "$2")
+	outfile=$(cacheloc <<< $name)
+	final=$(sed -E 's/\.svg/\.symbolic\.png/g' <<< "$outfile$(basename $name)")
+
+	if [[ -f "$final" ]]; then
+		# File exists, so we skip recreating it
+		echo "$final"
+	else
+		mkdir -p "$outfile"
+		gtk-encode-symbolic-svg -o "$outfile" "$name" 16x16
+
+		echo "$final"
+	fi
+}
+
+function recurse_entry() {
+	local name=$(sed -E 's/.+://g' <<< "$1")
+	local base=$(sed -E 's/:.+//g' <<< "$1")
+
+	local input
+
+	IFS=":" read -ra input <<< "$1"
+
+
+	local rename
+	local name
+	local base
+
+	if [[ ${#input[@]} -eq 2 ]]; then
+		rename="$1"
+		name=${input[1]}
+		base=${input[0]}
+	elif [[ ${#input[@]} -eq 3 ]]; then
+		rename=${input[0]}
+		name=${input[2]}
+		base=${input[1]}
+	else
+		log "Entries must be either 2 or three fields"
+		log ""
+		log "Either:"
+		log "  <Short Name>:<Package>:<Icon Name>"
+		log "  <Package>:<Icon Name>"
+		log ""
+		log "(In the second case, the \"Short\" name is just <Package>:<Icon Name>)"
+
+		exit 1
+	fi
+
+	local it=$(get "$base" "$name")
+
+	local jqin=$(cat <<JQEOF
+{
+	key: "$rename",
+	value: {
+		path: "$it",
+		css: "background-image: image(-gtk-recolor(url(\"$it\"))); background-repeat: no-repeat;"
+	}
+}
+JQEOF
+)
+
+	jq -cn "$jqin"
+}
+
+function make_all() {
+	for ic in "$@"; do
+		recurse_entry "$ic"
+	done
+}
+
+function make_all_lines() {
+	local ic
+	while read ic; do
+		recurse_entry "$ic"
+	done
+}
+
+case $1 in
+	get)
+		get "$2" "$3"
+		;;
+	eww-css)
+		make_all "${@:2}" | jq -c --slurp 'from_entries'
+		;;
+	eww-css-file)
+		jq --raw-output '.[]' < "$2" \
+			| make_all_lines \
+			| jq -c --slurp 'from_entries'
+		;;
+	eww-watch-file)
+		watchexec -w $2 -- "$BASH_SOURCE" eww-css-file "$2"
+		;;
+	rm)
+		name=$(svg_name $2 $3)
+		outfile=$(cacheloc <<< $name)
+		final=$(sed -E 's/\.svg/\.symbolic\.png/g' <<< "$outfile$(basename $name)")
+
+		if [[ -f "$final" ]]; then
+			rm "$final"
+		fi
+		;;
+	cached)
+		fd --extension png . "$cache_dir" |\
+			std "$cache_dir" |\
+			extract
+		;;
+	groups)
+		ls $base_dir
+		;;
+	fd)
+		fd --extension svg $2 "$base_dir" |\
+			std "$base_dir" |\
+			extract
+		;;
+	*)
+		exit 1
+		;;
+esac

@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+function combine_all() {
+	jq -c --slurp 'from_entries'
+}
+
+function val() {
+	jq -c --arg name "$1" '{ key: $name, value: (.) }'
+}
+
+function str() {
+	local it
+	read it
+	echo "\"$it\""
+}
+
+function get_time() {
+	(
+		date +%H:%M | str | val "display";\
+		date "+%H : %M : %S" | str | val "detail"
+	) | combine_all | val "time"
+}
+
+function get_date() {
+	(
+		date "+%A" | str | val "weekday";\
+		date "+%b" | str | val "shortmonth";\
+		date "+%d" | str |\
+			sed -E 's/0*(\d+)/\1/g' | val "day";\
+			date "+%A %Y-%m-%da" | str | val "full"
+	) | combine_all | val "date"
+}
+
+function get_sound() {
+	(
+		pactl get-sink-volume @DEFAULT_SINK@ |\
+			grep -Eo '[0-9]+%' |\
+			tr -d '%' |\
+			head -n 1 |\
+			val "volume";\
+		pactl get-sink-mute @DEFAULT_SINK@ \
+			| awk '{ if ($2 == "yes") { print "true"; } else { print "false"; }
+		}'\
+			| val "mute"
+	) | combine_all | val "sound"
+}
+
+(get_time; get_date; get_sound) | combine_all
