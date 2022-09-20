@@ -1,0 +1,12 @@
+[
+	"faf-6.2:volume-high",
+	"faf-6.2:volume-low",
+	"faf-6.2:volume-off",
+	"faf-6.2:volume-xmark",
+	"vol-high:Tela-purple/16/actions:audio-volume-high",
+	"vol-med:Tela-purple/16/actions:audio-volume-medium",
+	"vol-low:Tela-purple/16/actions:audio-volume-low",
+	"vol-mute:Tela-purple/16/actions:audio-volume-muted",
+	"clock:faf-6.2/svgs/regular:clock",
+	"calendar:faf-6.2/svgs/regular:calendar"
+]

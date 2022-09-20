@@ -1,0 +1,22 @@
+;; Update with the following when ics.json changes
+;; ./scripts/ic-cache eww-css-file ./ics.json
+(deflisten ics
+  `watchexec -w ./ics.json -- ./scripts/ic-cache eww-css-file ./ics.json`)
+
+(defwidget icon [name ?color ?halign ?valign]
+  (box
+    :width 16
+    :height 16
+    :hexpand false
+    :vexpand false
+    :halign { halign ?: "center" }
+    :valign { valign ?: "center" }
+    :style {
+      let
+        ic-bg = ics[name]?.css,
+        base-css = ic-bg ?: "background-color: red;",
+        color = color ?: "white"
+      in
+        "color: ${color}; ${base-css}"
+      end
+    }))

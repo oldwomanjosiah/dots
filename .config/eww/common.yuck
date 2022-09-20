@@ -1,0 +1,31 @@
+(defwidget sidecontent [side ?inverted]
+  (box
+      :hexpand false
+      :halign {
+      let
+        norm = inverted != true,
+        l = "left",
+        s = "start",
+        e = "end"
+      in
+        side == l ? (norm ? s : e) : (norm ? e : s)
+      end
+      }
+      :vexpand false
+      :valign "center"
+      :spacing 15
+      :space-evenly false
+      :class "side"
+    (children)))
+
+(defwidget bubble [?orientation ?spacing ?bin ?tooltip ?distance]
+  (box
+    :class { "bubble" + (distance != "" ? " d${distance}" : "") }
+    :tooltip { tooltip }
+    (box
+      :orientation { orientation ?: "h" }
+      :space-evenly false
+      :spacing { spacing }
+      :class { bin != false ? "bin" : "" }
+      (children))))
+

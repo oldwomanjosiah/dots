@@ -1,0 +1,69 @@
+;; Requires common.yuck && ics.yuck to be included
+
+(defpoll sys
+  :interval "50ms"
+  :initial "{}"
+  `./scripts/system`)
+
+(defwidget time [?distance]
+  (bubble
+    :spacing 8
+    :tooltip { sys?.time?.detail }
+    :distance { distance }
+    (icon :name "clock")
+    (label :text { sys?.time?.display })))
+
+(defwidget date [?distance]
+  (bubble
+    :spacing 8
+    :tooltip { sys?.date?.full }
+    :distance { distance }
+    (icon :name "calendar")
+    (label
+      :text {
+        let
+          dt = sys?.date,
+          wd = dt?.weekday,
+          mon = dt?.shortmonth,
+          day = dt?.day
+        in
+          "${wd} ${mon} ${day}"
+        end
+      })))
+
+(defwidget volume [?distance]
+  (bubble
+    :spacing 8
+    :tooltip { sys?.sound?.muted ? "Mute" : "${sys?.sound?.volume}%" }
+    :distance { distance }
+    (button
+      :onclick `pactl set-sink-mute @DEFAULT_SINK@ toggle`
+      (icon
+        :name {
+          let
+            s = sys?.sound,
+            mute = s?.mute ?: true,
+            vol = s?.volume ?: 0.0
+          in
+            mute || vol < 10 ? "vol-mute" :
+              vol < 35 ? "vol-low" :
+                vol < 75 ? "vol-med" :
+                  "vol-high"
+          end
+        }))
+    (circular-progress
+      :visible {
+      let
+        s = sys?.sound,
+        m = s?.mute ?: true,
+        v = s?.volume ?: 0.0
+      in
+        (m || v < 10) ? false : true
+      end
+      }
+      :width 16
+      :height 16
+      :value { sys.sound.volume ?: 0.0 }
+      :start-at 0
+      :thickness 2
+      :clockwise true)))

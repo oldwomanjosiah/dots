@@ -1,0 +1,42 @@
+(deflisten active_workspaces
+  :initial "{}"
+  `./scripts/workspaces watch`)
+
+(defwidget workspaceIndicator [num monitor]
+  (box :orientation "v"
+    (button
+      :class {
+        let
+          ws = active_workspaces["${num}"],
+          foc = ws?.dis == monitor ? " focused" : "",
+          vis = (ws?.dis ?: -1) >= 0 ? " visible" : "",
+          ex = ws?.ex == true ? " exists" : ""
+        in
+          "indicator " + foc + vis + ex
+        end
+      }
+      :tooltip "Workspace ${num}"
+      :onclick "scripts/workspaces set ${num}"
+      (box :orientation "v"
+        (box :orientation "h"
+          (box :class "inner"))))))
+
+(defwidget workspaces [monitor]
+  (box
+    :orientation "h"
+    :hexpand "false"
+    :vexpand "false"
+    (box
+      :orientation "h"
+      :space-evenly false
+      :class "workspaces-bar bubble"
+      :hexpand false
+      :vexpand false
+      :halign "center"
+      :spacing 10
+      (for entry in {
+          [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+        }
+        (workspaceIndicator
+          :num { entry }
+          :monitor monitor)))))
