@@ -1,22 +1,20 @@
 use std::{
     hash::{Hash, Hasher},
-    io::{BufRead, BufReader, Write},
     path::PathBuf,
-    process::ChildStdout,
 };
 
 use futures::{pin_mut, StreamExt};
 use once_cell::sync::Lazy;
 use regex::Regex;
-use reqwest::Method;
+
 use tokio::io::AsyncBufReadExt;
 
-const FMT_STR: &'static str = r#"status:{{status}},title:{{title}},artist:{{artist}},album:{{album}},length:{{mpris:length}},url:{{mpris:artUrl}}"#;
-const RE_STR: &'static str = r#"([a-z]+):([^,]+),?"#;
+const FMT_STR: &str = r#"status:{{status}},title:{{title}},artist:{{artist}},album:{{album}},length:{{mpris:length}},url:{{mpris:artUrl}}"#;
+const RE_STR: &str = r#"([a-z]+):([^,]+),?"#;
 
-const STORE_LOC: &'static str = "./images";
-const RE_REPLACE: &'static str = "open.spotify.com";
-const RE_REPLACE_WITH: &'static str = "i.scdn.co";
+const STORE_LOC: &str = "./images";
+const RE_REPLACE: &str = "open.spotify.com";
+const RE_REPLACE_WITH: &str = "i.scdn.co";
 
 static PARSE_RE: Lazy<Regex> = Lazy::new(|| Regex::new(RE_STR).unwrap());
 
@@ -150,7 +148,7 @@ async fn main() {
 
     pin_mut!(meta_stream);
 
-    let timeout = std::time::Duration::from_secs(10);
+    let timeout = std::time::Duration::from_secs(120);
     let track_time = std::time::Duration::from_millis(500);
 
     loop {
