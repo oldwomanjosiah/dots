@@ -107,6 +107,35 @@ $cornerRadiusLarge:	1.2rem;
 	}
 }
 
+.ic {
+	&.color-primary {
+		color: $primary;
+	}
+
+	min-width: 16px;
+	min-height: 16px;
+}
+
+.ic-button {
+
+	// .ic { margin: 3px; }
+
+	border-radius: 6px;
+
+	&.darken:hover { background-color: darken($surface, 10); }
+	&.lighten:hover { background-color: lighten($surface, 10); }
+
+	&.darken,&.lighten .ic { margin: 3px; }
+
+	&.active-primary:hover {
+		.ic { color: lighten($primary, 5); }
+	}
+
+	&.active-primary:active {
+		.ic { color: $primary; }
+	}
+}
+
 // Workspace Indicators styling
 .workspaces-bar {
 

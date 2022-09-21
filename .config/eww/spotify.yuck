@@ -19,15 +19,18 @@
     :distance { distance }
     (spacebox
       :spacing 8
-      (button
+      (ic-button
         :onclick `playerctl --player=spotify previous`
-        (icon :name "prev"))
-      (button
+        :active-color "primary"
+        :name "prev")
+      (ic-button
         :onclick `playerctl --player=spotify play-pause`
-        (icon :name { (sp.playing ?: false) ? "pause" : "play" }))
-      (button
+        :active-color "primary"
+        :name { (sp.playing ?: false) ? "pause" : "play" })
+      (ic-button
         :onclick `playerctl --player=spotify next`
-        (icon :name "next")))
+        :active-color "primary"
+        :name "next"))
     (revealer
       :transition "slideright"
       :duration "1s"
@@ -42,4 +45,7 @@
           :lighten { lighten }
           :class "primary"
           :value { (sp.progress ?: 0) * 100 })
-        (icon :name "spotify")))))
+        (ic-button
+          :onclick `./scripts/workspaces focus spotify`
+          :active-color "primary"
+          :name "spotify")))))

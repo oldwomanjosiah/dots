@@ -11,12 +11,30 @@
     :vexpand false
     :halign { halign ?: "center" }
     :valign { valign ?: "center" }
-    :style {
+    :class {
       let
-        ic-bg = ics == "" ? "color: white;" : ics[name]?.css,
-        base-css = ic-bg ?: "background-color: red;",
-        color = color ?: "white"
+        base = "ic",
+        error-class = (ics == "" ? true : ics[name]?.css == "") ? " error" : "",
+        color-class = color == "" ? "" : " color-${color}"
       in
-        "color: ${color}; ${base-css}"
+        base + error-class + color-class
       end
-    }))
+    }
+    :style { ics == "" ? "" : ics[name]?.css }))
+
+(defwidget ic-button [name ?onclick ?color ?active-color ?lighten ?halign ?valign]
+  (eventbox
+    :cursor "pointer"
+    :onclick { onclick }
+    :class {
+      "ic-button"
+        + (active-color == "" ? "" : " active-${active-color}")
+        + (lighten == false ? " darken" : (lighten == true ? " lighten" : ""))
+    }
+    :hexpand false
+    :vexpand false
+    :halign { halign ?: "center" }
+    :valign { halign ?: "center" }
+    (icon
+      :name { name }
+      :color { color })))

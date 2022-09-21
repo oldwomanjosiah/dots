@@ -36,21 +36,21 @@
     :spacing 8
     :tooltip { (sys?.sound?.muted == true) ? "Mute" : "${sys?.sound?.volume}%" }
     :distance { distance }
-    (button
+    (ic-button
       :onclick `pactl set-sink-mute @DEFAULT_SINK@ toggle`
-      (icon
-        :name {
-          let
-            s = sys?.sound,
-            mute = s?.mute ?: true,
-            vol = s?.volume ?: 0.0
-          in
-            mute || vol < 10 ? "vol-mute" :
-              vol < 35 ? "vol-low" :
-                vol < 75 ? "vol-med" :
-                  "vol-high"
-          end
-        }))
+      :active-color "primary"
+      :name {
+        let
+          s = sys?.sound,
+          mute = s?.mute ?: true,
+          vol = s?.volume ?: 0.0
+        in
+          mute || vol < 10 ? "vol-mute" :
+            vol < 35 ? "vol-low" :
+              vol < 75 ? "vol-med" :
+                "vol-high"
+        end
+      })
     (circular-progress
       :visible {
       let

@@ -45,6 +45,28 @@ def convert_inputs:
 build_default(10) + convert_inputs
 '
 
+jq_find_conn=$(cat <<EOJQFIND
+def match_class(class):
+	if . == null then false
+	else . | ascii_downcase | contains(class | ascii_downcase)
+	end;
+
+def findcls(class):
+	if type == "array" then map(findcls(class)) | add
+	elif type == "object" then
+		(.nodes | findcls(class))
+			+ if (.window_properties.class | match_class(class)) then [.id] else [] end
+	else []
+	end;
+EOJQFIND
+)
+
+# {
+#   id,
+#   window_properties: class,
+#   nodes: [ { ... } ]
+# }
+
 ActiveWorspaces() {
 	i3-msg -t get_workspaces |\
 		# jq -c '.[] | { (["w", .num] | join("-")): { vis: .visible, foc: .focused } }'
@@ -72,6 +94,20 @@ SwitchWorkspace() {
 	i3-msg workspace $1
 }
 
+FindId() {
+	i3-msg -t get_tree | jq "$jq_find_conn findcls(\"$1\")"
+}
+
+FocusId() {
+	local ids=$(FindId $1)
+
+	if [[ "$(jq 'length' <<< "$ids")" -eq 1 ]]; then
+		local id=$(jq --raw-output '.[0]' <<< $ids)
+
+		i3-msg "[con_id=\"$id\"] focus"
+	fi
+}
+
 case "$1" in
 	get)
 		WorkspacesIndexed
@@ -87,6 +123,12 @@ case "$1" in
 
 	test)
 		ActiveWorspacesByNumber
+		;;
+	find-id)
+		FindId $2
+		;;
+	focus)
+		FocusId $2
 		;;
 
 	*)

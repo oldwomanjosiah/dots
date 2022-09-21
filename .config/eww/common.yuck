@@ -11,8 +11,8 @@
         side == l ? (norm ? s : e) : (norm ? e : s)
       end
       }
-      :vexpand false
-      :valign "center"
+      ;:vexpand false
+      ;:valign "center"
       :spacing 15
       :space-evenly false
       :class "side"
