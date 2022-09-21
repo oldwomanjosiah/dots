@@ -33,7 +33,7 @@
       :side "right"
       :inverted true
       (volume :distance 1)
-      (spotify :distance 2))))
+      (spotify :distance 2 :lighten true))))
 
 (defwindow bar-right
   :monitor 1
@@ -54,4 +54,4 @@
       :side "right"
       :inverted true
       (volume :distance 1)
-      (spotify :distance 2))))
+      (spotify :distance 2 :lighten true))))

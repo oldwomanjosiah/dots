@@ -36,7 +36,7 @@
     :spacing { spacing }
     (children)))
 
-(defwidget prog [value ?classes ?orientation ?width]
+(defwidget prog [value ?class ?orientation ?width ?lighten]
   (overlay
     (box
       :hexpand false
@@ -44,25 +44,28 @@
       :halign "center"
       :valign "center"
       :width { width ?: 100 }
+      :class { (lighten == true ? "light " : "") + "markers" }
       :space-evenly false
-      (box :hexpand false :class "prog-marker")
+      (box :hexpand false :class "mark")
       (box :hexpand true)
-      (box :hexpand false :class "prog-marker")
+      (box :hexpand false :class "mark")
       (box :hexpand true)
-      (box :hexpand false :class "prog-marker"))
+      (box :hexpand false :class "mark"))
     (progress
         :hexpand false
         :vexpand false
         :halign "center"
         :valign "center"
         :width { width ?: 100 }
+        :class { class }
         :class {
           let
-            theirs = classes != "" ? " ${classes}" : ""
+            theirs = class != "" ? " ${class}" : "",
+            light = (lighten == true ? " light" : "")
           in
             ;; I should also account for the posibility of vertical bars at some
             ;; point
-            "prog" + theirs
+            "prog" + theirs + light
           end
         }
         :orientation { orientation ?: "h" }

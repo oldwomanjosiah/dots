@@ -4,10 +4,18 @@
 
 (deflisten sp :initial `{}` `playerctl_spot`)
 
-(defwidget spotify [?distance]
+(defwidget spotify [?distance ?lighten]
   (bubble
     :spacing 0
-    :tooltip { sp != {} ? "Spotify" : "" }
+    :tooltip {
+      let
+        artist = sp.artist,
+        album = sp.album,
+        title = sp.title
+      in
+        "${artist}: ${album}\n${title}"
+      end
+    }
     :distance { distance }
     (spacebox
       :spacing 8
@@ -31,5 +39,7 @@
           :text "${sp.pos_str ?: "00:00"}")
         (prog
           :width 150
+          :lighten { lighten }
           :class "primary"
-          :value { (sp.progress ?: 0) * 100 })))))
+          :value { (sp.progress ?: 0) * 100 })
+        (icon :name "spotify")))))

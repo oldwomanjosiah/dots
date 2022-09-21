@@ -52,24 +52,40 @@ $cornerRadiusLarge:	1.2rem;
 	margin-right: $gapSize;
 }
 
-.prog-marker {
-	min-width: 6px;
-	min-height: 18px;
-	margin-left: 6px;
-	margin-right: 6px;
+.markers {
+	.mark {
+		min-width: 6px;
+		min-height: 18px;
+		margin-left: 6px;
+		margin-right: 6px;
 
-	//background-color: mix($surface, $onSurface, 90);
-	background-color: darken($surface, 5);
-	border-radius: 6px;
+		//background-color: mix($surface, $onSurface, 90);
+		background-color: darken($surface, 5);
+		border-radius: 6px;
+	}
+
+	&.light {
+		.mark {
+			background-color: lighten($surface, 5);
+		}
+	}
 }
 
 .prog {
+	&.light {
+		trough {
+			background-color: lighten($surface, 5);
+		}
+	}
+
 	trough {
 		// Needs to be set to _something_ to show up at all
 		min-width: 1px;
-		// padding: 6px;
-		background-color: darken($surface, 5);
 		border-radius: 6px;
+
+		background-color: darken($surface, 5);
+
+
 
 		progress {
 			// Keep at least a circle
@@ -82,7 +98,7 @@ $cornerRadiusLarge:	1.2rem;
 		}
 	}
 
-	.primary,& {
+	&.primary {
 		trough {
 			progress {
 				background-color: $primary;
