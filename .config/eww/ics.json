@@ -8,5 +8,9 @@
 	"vol-low:Tela-purple/16/actions:audio-volume-low",
 	"vol-mute:Tela-purple/16/actions:audio-volume-muted",
 	"clock:faf-6.2/svgs/regular:clock",
-	"calendar:faf-6.2/svgs/regular:calendar"
+	"calendar:faf-6.2/svgs/regular:calendar",
+	"play:faf-6.2/svgs/solid:play",
+	"pause:faf-6.2/svgs/solid:pause",
+	"prev:faf-6.2/svgs/solid:chevron-left",
+	"next:faf-6.2/svgs/solid:chevron-right"
 ]

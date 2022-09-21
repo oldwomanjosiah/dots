@@ -1,0 +1,35 @@
+;; Requires common.yuck && ics.yuck to be included
+;; Requires some [next,prev,play,pause] to be defined
+;;   in ics.json
+
+(deflisten sp :initial `{}` `playerctl_spot`)
+
+(defwidget spotify [?distance]
+  (bubble
+    :spacing 0
+    :tooltip { sp != {} ? "Spotify" : "" }
+    :distance { distance }
+    (spacebox
+      :spacing 8
+      (button
+        :onclick `playerctl --player=spotify previous`
+        (icon :name "prev"))
+      (button
+        :onclick `playerctl --player=spotify play-pause`
+        (icon :name { (sp.playing ?: false) ? "pause" : "play" }))
+      (button
+        :onclick `playerctl --player=spotify next`
+        (icon :name "next")))
+    (revealer
+      :transition "slideright"
+      :duration "1s"
+      :reveal { sp.playing == true || sp.playing == false }
+      :style "padding-left: 8px;"
+      (spacebox
+        :spacing 8
+        (label
+          :text "${sp.pos_str ?: "00:00"}")
+        (prog
+          :width 150
+          :class "primary"
+          :value { (sp.progress ?: 0) * 100 })))))

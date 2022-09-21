@@ -6,6 +6,7 @@ use std::{
 };
 
 use futures::{pin_mut, StreamExt};
+use once_cell::sync::Lazy;
 use regex::Regex;
 use reqwest::Method;
 use tokio::io::AsyncBufReadExt;
@@ -17,31 +18,27 @@ const STORE_LOC: &'static str = "./images";
 const RE_REPLACE: &'static str = "open.spotify.com";
 const RE_REPLACE_WITH: &'static str = "i.scdn.co";
 
-#[derive(Debug, Clone, serde::Serialize)]
-#[serde(untagged)]
-enum Response {
-    Data(SpotifyData),
-    None { closed: bool },
-}
+static PARSE_RE: Lazy<Regex> = Lazy::new(|| Regex::new(RE_STR).unwrap());
 
 #[derive(Debug, Clone, Default, serde::Serialize)]
 struct SpotifyData {
     closed: bool,
     mins: u32,
     secs: u32,
+    pos_secs: u32,
+    progress: f32,
     title: String,
     playing: bool,
+    pos_str: Option<String>,
     artist: Option<String>,
     album: Option<String>,
     art: Option<String>,
 }
 
 fn parse(input: String) -> Option<SpotifyData> {
-    let re = Regex::new(RE_STR).unwrap();
-
     let mut out = SpotifyData::default();
 
-    for captures in re.captures_iter(&input) {
+    for captures in PARSE_RE.captures_iter(&input) {
         let key = captures.get(1).unwrap();
         let value = captures.get(2).unwrap();
 
@@ -117,7 +114,7 @@ fn get_metadata() -> impl futures::Stream<Item = SpotifyData> {
 
         let mut lines = reader.lines();
 
-        while let Ok(Some(line)) = lines.next_line().await {
+        while let Some(line) = lines.next_line().await.unwrap() {
             if let Some(line) = parse(line) {
                 yield line;
             } else {
@@ -127,24 +124,19 @@ fn get_metadata() -> impl futures::Stream<Item = SpotifyData> {
     }
 }
 
-fn get_playing() -> impl futures::Stream<Item = bool> {
-    async_stream::stream! {
-        yield false;
+async fn get_playtime() -> u32 {
+    let output = tokio::process::Command::new("playerctl")
+        .args(["position", "--player=spotify"])
+        .output()
+        .await
+        .unwrap()
+        .stdout;
 
-        let mut child = tokio::process::Command::new("playerctl")
-            .args(["status", "--follow", "--player=spotify"])
-            .stdout(std::process::Stdio::piped())
-            .spawn()
-            .expect("Could not spawn playerctl");
+    let output = std::str::from_utf8(output.as_ref()).unwrap();
 
-        let reader = tokio::io::BufReader::new(child.stdout.take().unwrap());
+    let (time, _) = output.split_once('.').unwrap();
 
-        let mut lines = reader.lines();
-
-        while let Ok(Some(line)) = lines.next_line().await {
-            yield line.eq_ignore_ascii_case("Playing");
-        }
-    }
+    time.parse().unwrap()
 }
 
 #[tokio::main]
@@ -152,19 +144,27 @@ async fn main() {
     let mut latest_metadata = Option::<SpotifyData>::None;
     let mut latest_playing = false;
     let mut showing_as_playing = false;
+    let mut last_pos_secs = 0;
 
     let meta_stream = get_metadata();
-    let playing_stream = get_playing();
 
     pin_mut!(meta_stream);
-    pin_mut!(playing_stream);
 
     let timeout = std::time::Duration::from_secs(10);
+    let track_time = std::time::Duration::from_millis(500);
 
     loop {
         match latest_metadata.as_mut() {
             Some(meta) if showing_as_playing => {
                 meta.playing = latest_playing;
+                meta.pos_secs = last_pos_secs;
+                meta.progress = last_pos_secs as f32 / (meta.mins * 60 + meta.secs) as f32;
+
+                meta.pos_str.replace(format!(
+                    "{:02}:{:02}",
+                    last_pos_secs / 60,
+                    last_pos_secs % 60
+                ));
 
                 let out = serde_json::to_string(&meta).unwrap();
                 println!("{out}");
@@ -179,12 +179,15 @@ async fn main() {
             new_meta = meta_stream.next() => {
                 let new_meta = replace_image(new_meta.unwrap()).await;
 
+                latest_playing = new_meta.playing;
+                showing_as_playing = showing_as_playing || latest_playing;
+
                 latest_metadata.replace(new_meta);
             },
-            new_playing = playing_stream.next() => {
-                let new_playing = new_playing.unwrap();
-                latest_playing = new_playing;
-                showing_as_playing = true;
+            _ = tokio::time::sleep(track_time), if latest_playing => {
+                let playtime = get_playtime().await;
+
+                last_pos_secs = playtime;
             },
             _ = tokio::time::sleep(timeout), if showing_as_playing && !latest_playing => {
                 showing_as_playing = false;

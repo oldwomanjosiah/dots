@@ -52,9 +52,42 @@ $cornerRadiusLarge:	1.2rem;
 	margin-right: $gapSize;
 }
 
-.fa-icon {
-	.white {
-		//fill: white;
+.prog-marker {
+	min-width: 6px;
+	min-height: 18px;
+	margin-left: 6px;
+	margin-right: 6px;
+
+	//background-color: mix($surface, $onSurface, 90);
+	background-color: darken($surface, 5);
+	border-radius: 6px;
+}
+
+.prog {
+	trough {
+		// Needs to be set to _something_ to show up at all
+		min-width: 1px;
+		// padding: 6px;
+		background-color: darken($surface, 5);
+		border-radius: 6px;
+
+		progress {
+			// Keep at least a circle
+			min-height: 6px;
+			min-width: 6px;
+
+			border-radius: 6px;
+
+			background-color: $onSurface;
+		}
+	}
+
+	.primary,& {
+		trough {
+			progress {
+				background-color: $primary;
+			}
+		}
 	}
 }
 

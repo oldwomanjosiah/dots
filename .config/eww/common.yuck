@@ -21,11 +21,49 @@
 (defwidget bubble [?orientation ?spacing ?bin ?tooltip ?distance]
   (box
     :class { "bubble" + (distance != "" ? " d${distance}" : "") }
-    :tooltip { tooltip }
     (box
+      :tooltip { tooltip }
       :orientation { orientation ?: "h" }
       :space-evenly false
       :spacing { spacing }
       :class { bin != false ? "bin" : "" }
       (children))))
 
+(defwidget spacebox [?orientation ?spacing ?tooltip]
+  (box
+    :orientation { orientation ?: "h" }
+    :space-evenly false
+    :spacing { spacing }
+    (children)))
+
+(defwidget prog [value ?classes ?orientation ?width]
+  (overlay
+    (box
+      :hexpand false
+      :vexpand false
+      :halign "center"
+      :valign "center"
+      :width { width ?: 100 }
+      :space-evenly false
+      (box :hexpand false :class "prog-marker")
+      (box :hexpand true)
+      (box :hexpand false :class "prog-marker")
+      (box :hexpand true)
+      (box :hexpand false :class "prog-marker"))
+    (progress
+        :hexpand false
+        :vexpand false
+        :halign "center"
+        :valign "center"
+        :width { width ?: 100 }
+        :class {
+          let
+            theirs = classes != "" ? " ${classes}" : ""
+          in
+            ;; I should also account for the posibility of vertical bars at some
+            ;; point
+            "prog" + theirs
+          end
+        }
+        :orientation { orientation ?: "h" }
+        :value { value })))

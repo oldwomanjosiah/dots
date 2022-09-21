@@ -3,6 +3,7 @@
 
 (include "./sys.yuck")
 (include "./workspaces.yuck")
+(include "./spotify.yuck")
 
 ;; Requires updates currently only in fork
 ;; - oldwomanjosiah/eww/josiah/safe_access
@@ -31,7 +32,8 @@
     (sidecontent
       :side "right"
       :inverted true
-      (volume :distance 1))))
+      (volume :distance 1)
+      (spotify :distance 2))))
 
 (defwindow bar-right
   :monitor 1
@@ -40,4 +42,16 @@
   :hexpand "false"
   :vexpand "false"
   :stacking "fg"
-  (box :orientation "v" :class "wrap-bottom" (workspaces :monitor 1)))
+  (centerbox
+    :orientation "h"
+    :class "wrap-bottom"
+    (sidecontent
+      :side "left"
+      :inverted true
+      (time :distance 2) (date :distance 1))
+    (workspaces :monitor 1)
+    (sidecontent
+      :side "right"
+      :inverted true
+      (volume :distance 1)
+      (spotify :distance 2))))

@@ -204,7 +204,7 @@ bindsym $mod+r mode "resize"
 #         status_command i3status
 # }
 #
-exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+# exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 # exec --no-startup-id /usr/libexec/gnome-settings-daemon-localeexecxec --no-startup-id synclient VertScrollDelta=-111
 
