@@ -25,6 +25,8 @@ function M.setup(opts)
 		close_on_exit = true,
 		direction = M.default_direction 
 	}
+
+	require 'notify'
 end
 
 return M

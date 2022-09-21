@@ -79,10 +79,7 @@ require 'packer'.startup(function(use)
 	use 'tpope/vim-markdown'
 	use 'NoahTheDuke/vim-just'
 	use 'IndianBoy42/tree-sitter-just'
-	use {
-		'kevinhwang91/nvim-ufo',
-		requires = 'kevinhwang91/promise-async'
-	}
+	-- use { 'kevinhwang91/nvim-ufo', requires = 'kevinhwang91/promise-async' }
 end)
 
 package.loaded['oldwomanjosiah.util'] = nil
@@ -298,7 +295,7 @@ local cmp_out = require 'oldwomanjosiah.cmp'.setup {}
 require 'oldwomanjosiah.lsp'.setup {
 	capabilities = cmp_out.capabilities,
 	after = function()
-		require 'ufo'.setup {}
+		-- require 'ufo'.setup {}
 		vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 		vim.o.foldcolumn = '1'
 	end
@@ -320,6 +317,19 @@ require 'bufferline'.setup {
 }
 
 vim.notify = require 'notify'
+
+require 'notify'.setup {
+	max_width = function()
+		local min = 40
+		local per = math.floor(vim.o.columns * 0.25)
+
+		if min < per then
+			return per
+		else
+			return min
+		end
+	end
+}
 
 require 'oldwomanjosiah.nvim-tree':setup {}
 
