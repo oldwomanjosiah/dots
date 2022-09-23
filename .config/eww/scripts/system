@@ -2,19 +2,7 @@
 
 set -eou pipefail
 
-function combine_all() {
-	jq -c --slurp 'from_entries'
-}
-
-function val() {
-	jq -c --arg name "$1" '{ key: $name, value: (.) }'
-}
-
-function str() {
-	local it
-	read it
-	echo "\"$it\""
-}
+source "$(dirname "$BASH_SOURCE")/jqutil"
 
 function get_time() {
 	(
@@ -29,22 +17,103 @@ function get_date() {
 		date "+%b" | str | val "shortmonth";\
 		date "+%d" | str |\
 			sed -E 's/0*(\d+)/\1/g' | val "day";\
-			date "+%A %Y-%m-%da" | str | val "full"
+			date "+%A %Y-%m-%d" | str | val "full"
 	) | combine_all | val "date"
+}
+
+function get_volume_percent() {
+	pactl get-sink-volume @DEFAULT_SINK@ |\
+		grep -Eo '[0-9]+%' |\
+		tr -d '%' |\
+		head -n 1
 }
 
 function get_sound() {
 	(
-		pactl get-sink-volume @DEFAULT_SINK@ |\
-			grep -Eo '[0-9]+%' |\
-			tr -d '%' |\
-			head -n 1 |\
-			val "volume";\
+		get_volume_percent | val "volume";\
 		pactl get-sink-mute @DEFAULT_SINK@ \
-			| awk '{ if ($2 == "yes") { print "true"; } else { print "false"; }
-		}'\
+			| awk '{ if ($2 == "yes") { print "true"; } else { print "false"; } }'\
 			| val "mute"
 	) | combine_all | val "sound"
 }
 
-(get_time; get_date; get_sound) | combine_all
+function usage() {
+	local usage=$(cat <<EOUSAGE
+commands:
+	get
+		Get the current values for system stats (volume, date, etc)
+
+	volume <set|inc|dec> <amount>
+		Modify the system volume
+	
+	mute-toggle
+		Toggle the system mute status
+EOUSAGE
+)
+	log "$usage"
+	exit 1
+}
+
+function get_all() {
+	(get_time; get_date; get_sound) | combine_all
+}
+
+function volume() {
+	if [[ $# -ne 2 ]]; then
+		log "volume command takes exactly two arguments"
+		log ""
+		usage
+	fi
+
+	local current=$(get_volume_percent)
+	local setto
+
+	case $1 in
+		set)
+			setto="$2"
+			;;
+		inc)
+			setto=$(expr "$current" + "$2")
+			;;
+		dec)
+			setto=$(expr "$current" - "$2")
+			;;
+		*)
+			log "unknown volume subcommand $1"
+			log ""
+			usage
+			;;
+	esac
+
+	if [[ "$setto" -gt 100 ]]; then
+		setto=100
+	elif [[ "$setto" -lt 0 ]]; then
+		setto=0
+	fi
+
+	pactl set-sink-volume @DEFAULT_SINK@ "$setto%"
+}
+
+if [[ $# -eq 0 ]]; then
+	usage
+fi
+
+case $1 in
+	-h|help)
+		usage
+		;;
+	get)
+		get_all
+		;;
+	mute-toggle)
+		pactl set-sink-mute @DEFAULT_SINK@ toggle
+		;;
+	volume)
+		volume "${@:2}"
+		;;
+	*)
+		log "Unknown command $@"
+		log ""
+		usage
+		;;
+esac

@@ -1,6 +1,8 @@
 #/bin/bash
 # vim:ft=bash
 
+source "$(dirname "$BASH_SOURCE")/jqutil"
+
 jq_desc='
 def build_default(count):
 	reduce 

@@ -70,3 +70,49 @@
         }
         :orientation { orientation ?: "h" }
         :value { value })))
+
+(defwidget slider [value onchange ?min ?max ?hover ?width ?lighten]
+  (overlay
+    :class "slider"
+    (box
+      :width { (width ?: 100) }
+      :height 16)
+    (box
+      :width { (width ?: 100) - 16 }
+      :height 6
+      :vexpand false
+      :valign "center"
+      :hexpand false
+      :halign "center"
+      :class "track lighten"
+      (box
+        :width {
+          let
+            base = (width ?: 100) - 16,
+            min = min ?: 0,
+            max = max ?: 100,
+            percent = (value - min) / (max - min)
+          in
+            round(base * percent, 0)
+          end
+        }
+        :height 6
+        :vexpand false
+        :valign "start"
+        :hexpand false
+        :halign "start"
+        :class "fill"))
+    (scale
+      :width { width ?: 100 }
+      :vexpand false
+      :valign "center"
+      :hexpand false
+      :halign "center"
+      :height 16
+      :value { value }
+      :min { min ?: 0 }
+      ; Max for scale is exclusive, but we want a real max
+      :max { (max ?: 100) + 1 }
+      :orientation "h"
+      :class { hover == "" ? "" : "hover-${hover}" }
+      :onchange { onchange })))

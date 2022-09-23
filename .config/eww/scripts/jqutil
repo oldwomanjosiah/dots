@@ -1,0 +1,20 @@
+# vim:ft=bash
+
+function combine_all() {
+	jq -c --slurp 'from_entries'
+}
+
+function val() {
+	jq -c --arg name "$1" '{ key: $name, value: (.) }'
+}
+
+function str() {
+	local it
+	read it
+	echo "\"$it\""
+}
+
+function log() {
+	cat <<< "$@" >&2
+}
+

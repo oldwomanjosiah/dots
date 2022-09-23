@@ -16,6 +16,10 @@ $cornerRadiusLarge:	1.2rem;
 	@return transparentize($surface, $amount);
 }
 
+@mixin ease($property) {
+	transition: $property 0.3s ease-in-out;
+}
+
 * { all: unset; }
 
 .bounding {
@@ -68,6 +72,42 @@ $cornerRadiusLarge:	1.2rem;
 		.mark {
 			background-color: lighten($surface, 5);
 		}
+	}
+}
+
+.slider {
+	.track {
+		min-height: 6px;
+		border-radius: 6px;
+
+		background-color: $surface;
+
+		&.lighten { background-color: lighten($surface, 5); }
+		&.darken { background-color: darken($surface, 5); }
+
+		.fill {
+			background-color: rgba(white, 0.2);
+			border-radius: 6px;
+		}
+	}
+
+	scale contents trough {
+		margin-left: 8px;
+		margin-right: 8px;
+	}
+
+	scale contents trough slider {
+		@include ease(background-color);
+
+		min-width: 16px;
+		min-height: 16px;
+		border-radius: 16px;
+
+		background-color: white;
+	}
+
+	scale.hover-primary contents trough slider:hover {
+		background-color: darken($primary, 5);
 	}
 }
 

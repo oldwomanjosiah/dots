@@ -32,7 +32,7 @@
         :active-color "primary"
         :name "next"))
     (revealer
-      :transition "slideright"
+      :transition "slideleft"
       :duration "1s"
       :reveal { sp.playing == true || sp.playing == false }
       :style "padding-left: 8px;"

@@ -2,6 +2,8 @@
 
 set -eou pipefail
 
+source "$(dirname "$BASH_SOURCE")/jqutil"
+
 base_dir=/home/josiah/.local/share/icons/
 cache_dir=/home/josiah/.local/share/ic-cache/
 
@@ -15,10 +17,6 @@ function esp() {
 
 function uesp() {
 	sed -E 's/\//\\\//g'
-}
-
-function log() {
-	cat <<< "$@" >> /dev/stderr
 }
 
 function extract() {
