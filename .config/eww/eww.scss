@@ -20,7 +20,10 @@ $cornerRadiusLarge:	1.2rem;
 	transition: $property 0.3s ease-in-out;
 }
 
-* { all: unset; }
+* {
+	all: unset;
+	font-weight: 700;
+}
 
 .bounding {
 	background-color: $surface;
@@ -107,7 +110,7 @@ $cornerRadiusLarge:	1.2rem;
 	}
 
 	scale.hover-primary contents trough slider:hover {
-		background-color: darken($primary, 5);
+		background-color: lighten($primary, 00);
 	}
 }
 
@@ -176,9 +179,12 @@ $cornerRadiusLarge:	1.2rem;
 	}
 }
 
+// TODO(josiah) more in stle workspace bar which uses custom
+// icons for workspace indicators, instead of custom box nesting.
+// This would probably use an overlay to stack the icons for nesting purposes.
+
 // Workspace Indicators styling
 .workspaces-bar {
-
 	.indicator {
 		min-width: 16px;
 		min-height: 16px;
