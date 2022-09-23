@@ -10,7 +10,7 @@
 
 ### Eww (Status Bar)
 
-![Eww Expanded](./.config/screenshots/eww-expand.jpg)
+![Eww Expanded](./.config/screenshots/eww-expanded.jpg)
 ![Eww Contracted](./.config/screenshots/eww-contracted.jpg)
 
 - [configs](./.config/eww/)
