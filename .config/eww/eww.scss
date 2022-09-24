@@ -13,7 +13,8 @@ $cornerRadiusLarge:	1.2rem;
 // @define-color Primary #d38aea;
 
 @function surface($amount) {
-	@return transparentize($surface, $amount);
+	@return lighten($surface, 30 * $amount);
+	//@return transparentize($surface, $amount);
 }
 
 @mixin ease($property) {
