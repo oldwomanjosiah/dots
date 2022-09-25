@@ -72,7 +72,7 @@ same prefix. This can relatively easily be automated:
 
 For bash
 ```bash
-echo 'function dit() {} >> ~/.bashrc'
+echo 'function dit() { git --git-dir=$HOME/.dotrepo --work-tree=$HOME "$@" } >> ~/.bashrc'
 ```
 
 For fish

@@ -121,7 +121,7 @@ local font = {
 	},
 	comic = {
 		name = 'Comic Code Ligatures',
-		default_size = 'h9',
+		default_size = 'h7',
 	},
 	set = (function(to)
 		local name = to.name or to[0]
