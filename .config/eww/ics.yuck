@@ -3,7 +3,7 @@
 (deflisten ics
   `watchexec -w ./ics.json -- ./scripts/ic-cache eww-css-file ./ics.json`)
 
-(defwidget icon [name ?color ?halign ?valign]
+(defwidget icon [name ?color ?halign ?valign ?style]
   (box
     :width 16
     :height 16
@@ -20,7 +20,14 @@
         base + error-class + color-class
       end
     }
-    :style { ics == "" ? "" : ics[name]?.css }))
+    :style {
+      let
+        rawstyle = ics == "" ? "" : ics[name]?.css,
+        overrides = style ?: ""
+      in
+        overrides == "" ? rawstyle : (overrides + ";" + rawstyle)
+      end
+    }))
 
 (defwidget ic-button [name ?onclick ?color ?active-color ?lighten ?halign ?valign]
   (eventbox

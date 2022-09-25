@@ -10,7 +10,9 @@ $gapSize:			15px;
 $bodyMargin:		0.6rem;
 $cornerRadiusLarge:	1.2rem;
 
-// @define-color Primary #d38aea;
+@define-color danger #ec7279;
+@define-color good #a0c980;
+@define-color warn #deb974;
 
 @function surface($amount) {
 	@return lighten($surface, 30 * $amount);

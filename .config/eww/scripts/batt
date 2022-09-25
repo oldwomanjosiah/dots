@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+name="BAT0"
+ps_root="/sys/class/power_supply"
+
+path="$ps_root/$name"
+
+states=(empty quarter half three-quarters full)
+
+function get() {
+	cat "$path/$1"
+}
+
+function icon() {
+	local count=${#states[@]}
+
+	local idx=$(expr "$1" "*" "$count" "/" "$2")
+
+	echo ${states[$idx]}
+}
+
+function current() {
+	local status=`get status`
+	local alarm=`get alarm`
+	local percent=`get capacity`
+	local max=`get energy_full`
+	local alarm_percent=`expr 100 "*" $alarm / $max`
+
+	local ic_type=$(icon $percent 100)
+
+	local color_name
+	local charging=false
+
+	case $status in
+		Discharhing)
+			color_name=""
+			;;
+		Charging)
+			color_name="@good"
+			charging=true
+			;;
+		Full)
+			color_name="@good"
+			;;
+		*)
+			color_name=""
+			;;
+	esac
+
+	if [[ $percent -le $alarm_percent ]]; then
+		color_name="@danger"
+	fi
+
+	local value=$(cat <<EOCURRENT
+{
+	"status": "$status",
+	"percent": $percent,
+	"color_name": "$color_name",
+	"alarm": $alarm_percent,
+	"ic-ty": "$ic_type",
+	"charging": $charging
+}
+EOCURRENT
+)
+
+	echo "$value" | jq -c
+}
+
+current

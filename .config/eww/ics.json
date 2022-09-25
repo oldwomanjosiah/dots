@@ -3,15 +3,16 @@
 	"vol-med:faf-6.2:volume-low",
 	"vol-low:faf-6.2:volume-off",
 	"vol-mute:faf-6.2:volume-xmark",
-	"-vol-high:Tela-purple/16/actions:audio-volume-high",
-	"-vol-med:Tela-purple/16/actions:audio-volume-medium",
-	"-vol-low:Tela-purple/16/actions:audio-volume-low",
-	"-vol-mute:Tela-purple/16/actions:audio-volume-muted",
 	"clock:faf-6.2/svgs/regular:clock",
 	"calendar:faf-6.2/svgs/regular:calendar",
 	"play:faf-6.2/svgs/solid:play",
 	"pause:faf-6.2/svgs/solid:pause",
 	"prev:faf-6.2/svgs/solid:chevron-left",
 	"next:faf-6.2/svgs/solid:chevron-right",
-	"spotify:faf-6.2/svgs/brands:spotify"
+	"spotify:faf-6.2/svgs/brands:spotify",
+	"batt-empty:faf-6.2/svgs/solid:battery-empty",
+	"batt-full:faf-6.2/svgs/solid:battery-full",
+	"batt-half:faf-6.2/svgs/solid:battery-half",
+	"batt-quarter:faf-6.2/svgs/solid:battery-quarter",
+	"batt-three-quarters:faf-6.2/svgs/solid:battery-three-quarters"
 ]

@@ -5,7 +5,13 @@
   :initial "{}"
   `./scripts/system get`)
 
+(defpoll batt
+  :interval "1m"
+  :initial "{}"
+  `./scripts/batt`)
+
 (defvar vol-visible `false`)
+(defvar batt-visible `false`)
 
 (defwidget time [?distance]
   (bubble
@@ -33,6 +39,36 @@
         end
       })))
 
+(defwidget battery [?distance]
+  (eventbox
+    :onhover `${EWW_EXECUTABLE} update batt-visible=true`
+    :onhoverlost `${EWW_EXECUTABLE} update batt-visible=false`
+    (bubble
+      :spacing 0
+      :tooltop {
+        let
+          stat = batt.status,
+          per = "${batt.percent}%"
+        in
+          stat + " " + per
+        end
+      }
+      :distance { distance }
+      (icon
+        :style {
+          let it = batt.color_name in
+            it != "" ? "color: ${it};" : ""
+          end
+        }
+        :name "batt-${batt.ic-ty}")
+      (revealer
+        :reveal { batt-visible }
+        :duration "0.25s"
+        :transition "slideleft"
+        (label
+          :text "${batt.percent}%"
+          :style "padding-left: 8px;")))))
+
 (defwidget volume [?distance]
   (eventbox
     :onhover `${EWW_EXECUTABLE} update vol-visible=true`
@@ -58,7 +94,7 @@
       })
     (revealer
       :reveal { vol-visible == false && (sys?.sound?.mute == false) }
-      :duration "1s"
+      :duration "0.25s"
       :transition "slideleft"
       (box
         :style "padding-left: 8px;"
@@ -71,7 +107,7 @@
           :value { sys?.sound?.volume ?: 0 })))
     (revealer
       :reveal { vol-visible == true && (sys?.sound?.mute == false) }
-      :duration "1s"
+      :duration "0.25s"
       :transition "slideleft"
       :style "left-padding: 8px;"
       (spacebox
