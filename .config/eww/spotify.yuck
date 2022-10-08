@@ -2,16 +2,17 @@
 ;; Requires some [next,prev,play,pause] to be defined
 ;;   in ics.json
 
-(deflisten sp :initial `{}` `playerctl_spot`)
+(deflisten sp :initial `{}` `RUST_LOG=info playerctl_spot`)
 
 (defwidget spotify [?distance ?lighten]
   (bubble
     :spacing 0
     :tooltip {
       let
-        artist = sp.artist,
-        album = sp.album,
-        title = sp.title
+        song = sp.song,
+        artist = song?.artist,
+        album = song?.album,
+        title = song?.title
       in
         "${artist}: ${album}\n${title}"
       end
@@ -34,17 +35,19 @@
     (revealer
       :transition "slideleft"
       :duration "1s"
-      :reveal { sp.playing == true || sp.playing == false }
+      :reveal { sp.open ?: false }
       :style "padding-left: 8px;"
       (spacebox
         :spacing 8
         (label
-          :text "${sp.pos_str ?: "00:00"}")
+          :text {
+            sp.song?.position?.formatted ?: "00:00"
+          })
         (prog
           :width 150
           :lighten { lighten }
           :class "primary"
-          :value { (sp.progress ?: 0) * 100 })
+          :value { (sp.song?.progress ?: 0) * 100 })
         (ic-button
           :onclick `./scripts/workspaces focus spotify`
           :active-color "primary"
