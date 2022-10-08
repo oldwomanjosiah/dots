@@ -434,11 +434,12 @@ impl Watcher {
 async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt()
         .with_env_filter(tracing_subscriber::EnvFilter::from_default_env())
+        .with_writer(|| std::io::stderr())
         .init();
 
     tracing::info!("Staring {NAME} ({VERSION})");
 
-    Watcher::new(Duration::from_secs(2), "./images")
+    Watcher::new(Duration::from_secs(120), "./images")
         .context("Building Watcher")?
         .run()
         .await

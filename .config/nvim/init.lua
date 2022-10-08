@@ -119,9 +119,13 @@ local font = {
 		name = 'Fira Code',
 		default_size = 'h9',
 	},
-	comic = {
+	comicLaptop = {
 		name = 'Comic Code Ligatures',
 		default_size = 'h7',
+	},
+	comic = {
+		name = 'Comic Code Ligatures',
+		default_size = 'h9',
 	},
 	set = (function(to)
 		local name = to.name or to[0]
