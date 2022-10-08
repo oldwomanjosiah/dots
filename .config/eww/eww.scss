@@ -15,7 +15,7 @@ $cornerRadiusLarge:	1.2rem;
 @define-color warn #deb974;
 
 @function surface($amount) {
-	@return lighten($surface, 30 * $amount);
+	@return darken($surface, 25 * $amount);
 	//@return transparentize($surface, $amount);
 }
 

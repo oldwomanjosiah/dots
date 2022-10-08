@@ -34,15 +34,19 @@
         :name "next"))
     (revealer
       :transition "slideleft"
-      :duration "1s"
+      :duration "0.25s"
       :reveal { sp.open ?: false }
       :style "padding-left: 8px;"
       (spacebox
         :spacing 8
-        (label
-          :text {
-            sp.song?.position?.formatted ?: "00:00"
-          })
+        (overlay
+          ; Hack to make this always take the width of the largest number option
+          ; Only works because 0 is (probably?) the widest charachter in the set.
+          (label :style "color: rgba(0, 0, 0, 0);" :text "00:00")
+          (label
+            :text {
+              sp.song?.position?.formatted ?: "00:00"
+            }))
         (prog
           :width 150
           :lighten { lighten }
