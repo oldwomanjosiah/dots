@@ -45,9 +45,10 @@ function M.setup(opts)
 		experimental = { native_menu = false, ghost_text = true },
 	})
 
-	local capabilities = cmp_lsp.update_capabilities(
+	--[[ local capabilities = cmp_lsp.update_capabilities(
 		vim.lsp.protocol.make_client_capabilities()
-	)
+	) ]]
+	local capabilities = cmp_lsp.default_capabilities()
 
 	return { capabilities = capabilities }
 end

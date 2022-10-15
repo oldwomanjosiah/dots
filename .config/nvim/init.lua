@@ -2,6 +2,11 @@ vim.g.mapleader = ' '
 vim.g.home = os.getenv('HOME')
 vim.g.config_dir = vim.g.home .. '/.config/nvim/'
 vim.opt.termguicolors = true
+vim.g.loaded_python3_provider = false
+vim.g.loaded_node_provider = false
+vim.g.loaded_perl_provider = false
+
+vim.o.laststatus = 3
 
 
 require 'neovide'.init {
@@ -48,7 +53,7 @@ require 'packer'.startup(function(use)
 	use 'nvim-lualine/lualine.nvim'
 	use {
 		'akinsho/bufferline.nvim',
-		tag = 'v1.*',
+		tag = 'v2.*',
 	}
 	use 'rcarriga/nvim-notify'
 	use 'moll/vim-bbye'
@@ -62,7 +67,7 @@ require 'packer'.startup(function(use)
 
 	use {
 		'akinsho/toggleterm.nvim',
-		tag = 'v1.*',
+		tag = 'v2.*',
 	}
 	use 'tpope/vim-surround'
 
@@ -316,8 +321,21 @@ require 'bufferline'.setup {
 		right_mouse_command = '',
 		middle_mouse_command = 'Bdelete %d',
 		close_command = 'Bdelete %d',
-		diagnostics = 'nvim_lsp'
-	}
+		diagnostics = 'nvim_lsp',
+		offsets = {
+			{
+				filetype = "NvimTree",
+				text = "File Explorer",
+				highlight = "File",
+				separator = true
+			}
+		},
+		indicator = {
+			icon = '+',
+			style = 'underline'
+		},
+		separator_style = 'slant',
+	},
 }
 
 vim.notify = require 'notify'
